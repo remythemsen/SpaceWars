@@ -227,11 +227,11 @@ module SpaceWars.Core.States {
                 // Adding the Prop
                 var prop = this.game.add.sprite(100, 100, this.terrainAssets[terrainIndex].asset_key, null, this.terrainProps);
 
-                // Enabling physics engine on bullet
-                prop.enableBody = true;
-                prop.physicsBodyType = Phaser.Physics.ARCADE;
+                //prop.enableBody = true;
 
-                prop.smoothed = false;
+                //prop.physicsBodyType = Phaser.Physics.ARCADE;
+
+                //prop.smoothed = false;
 
                 // killing the prop
                 prop.kill();
@@ -324,7 +324,6 @@ module SpaceWars.Core.States {
             if (this.enemies.countLiving() > 0) {
                 // Declaring enemy container
                 var enemy : Models.Concrete.Enemy;
-
                 // Find an enemy which is not in the game, but is still alive
                 for (var i = 0; i < this.enemies.children.length; i++) {
                     // TODO: Make array Typed by Enemy<>
@@ -335,7 +334,6 @@ module SpaceWars.Core.States {
                         break;
                     }
                 }
-
                 if (enemy) {
                     // Adding to the map
                     enemy.exists = true;

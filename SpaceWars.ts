@@ -5,4 +5,3 @@ module SpaceWars
 {
     var game = new Core.Game();
 }
-

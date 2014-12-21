@@ -25,8 +25,8 @@ module SpaceWars.Models.Concrete {
         bullets : Phaser.Group;
 
         // Damage
-        minDamage: number;
-        maxDamage: number;
+        minDmg: number;
+        maxDmg: number;
 
         constructor(game:Phaser.Game, x:number, y: number, key:string ) {
 
