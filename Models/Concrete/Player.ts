@@ -62,8 +62,7 @@ module SpaceWars.Models.Concrete {
 
                 // Setting pivot / scale point to be in center of bullet sprite
                 bullet.anchor.set(0.5);
-                bullet.smoothed = false;
-
+                bullet.smoothed = false; 
                 //scaling down bullet size
                 bullet.scale.x = 0.5;
                 bullet.scale.y = 0.5;
@@ -74,10 +73,13 @@ module SpaceWars.Models.Concrete {
             this.bullets.setAll('checkWorldBounds', true);
             this.bullets.setAll('outOfBoundsKill', true);
 
-
             // Setting base damage
             this.maxDmg = 8;
             this.minDmg = 6;
+
+			var shootKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+			shootKey.onDown.add(this.shoot, this);
+
 
         }
 
@@ -112,10 +114,7 @@ module SpaceWars.Models.Concrete {
 
             }
 
-            if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-                this.shoot();
-            }
-
+            
 
 
         }
