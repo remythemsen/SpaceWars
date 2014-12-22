@@ -3,6 +3,5 @@
 
 module SpaceWars
 {
-	console.log("awesometest in motion");
     var game = new Core.Game();
 }

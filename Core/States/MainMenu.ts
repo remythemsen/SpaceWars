@@ -9,6 +9,8 @@ module SpaceWars.Core.States
 
         assets: Array<any>;
         authService: Services.AuthService;
+        // The Stars (Background)
+        background:Phaser.TileSprite;      
 
         init(assets)
         {
@@ -20,10 +22,6 @@ module SpaceWars.Core.States
         {
 
             this.generateBackground();
-
-            // Resizing world
-            this.game.world.width = 800;
-            this.game.world.height = 640;
 
             // Header
             var heading = this.game.add.text(this.game.world.centerX, 100, 'MAIN MENU', { font: "16px Arial", fill: "#ffffff", align: "center" });
@@ -50,7 +48,12 @@ module SpaceWars.Core.States
             }
 
         }
+        update() : void {
 
+            //  Scroll the background
+            this.background.tilePosition.y -= 0.2;
+
+        }
         startGame()
         {
             this.game.state.start('Arena', true, false, this.assets);
@@ -70,6 +73,11 @@ module SpaceWars.Core.States
         {
             // Set background color
             this.game.stage.backgroundColor = '#000000';
+
+            //  The scrolling starfield background
+            this.background = this.game.add.tileSprite(0, 40, 2000, 600, 'background_stars');
+
+
 
         }
 

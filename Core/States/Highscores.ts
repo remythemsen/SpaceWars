@@ -6,16 +6,18 @@ module SpaceWars.Core.States {
         scoreRepo:Repositories.ScoreRepo;
         assets:Array<any>;
 
+        // The Stars (Background)
+        background:Phaser.TileSprite;      
+
         init(assets) {
             this.scoreRepo = new Repositories.ScoreRepo();
             this.assets = assets;
         }
 
         create() {
-            // Resizing world
-            this.game.world.width = 800;
-            this.game.world.height = 640;
 
+            // Creating background
+            this.generateBackground();
 
             var heading = this.game.add.text(this.game.world.centerX, 100, 'HIGHSCORES! - press B to return to menu', { font: "16px Arial", fill: "#ffffff", align: "center" });
             heading.anchor.set(0.5,0.5);
@@ -31,12 +33,13 @@ module SpaceWars.Core.States {
                var score = this.game.add.text(this.game.world.centerX, marginTop, s.name+' - '+s.score, { font: "10px Arial", fill: "#ffffff", align: "center" });
             });
 
-            // Creating background
-            this.generateBackground();
 
 
         }
         update() {
+            //  Scroll the background
+            this.background.tilePosition.y -= 0.2;
+
             if (this.game.input.keyboard.isDown(Phaser.Keyboard.B)) {
                 this.MainMenu();
             }
@@ -49,6 +52,9 @@ module SpaceWars.Core.States {
         generateBackground() {
             // Set background color
             this.game.stage.backgroundColor = '#000000';
+            //  The scrolling starfield background
+            this.background = this.game.add.tileSprite(0, 40, 2000, 600, 'background_stars');
+
 
         }
     }

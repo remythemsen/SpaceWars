@@ -11,8 +11,10 @@ module SpaceWars.Core.States {
         userRepo:Repositories.UserRepo;
         authService: Services.AuthService;
         score:number;
-        tileMap:any;
-        backgroundLayer: any;
+
+        // The Stars (Background)
+        background:Phaser.TileSprite;      
+
         popUpElementId: string = 'LoginWindow';
 
 
@@ -85,6 +87,9 @@ module SpaceWars.Core.States {
         }
         update() {
 
+            //  Scroll the background
+            this.background.tilePosition.y -= 0.2;
+
             if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
                 this.removePopUp();
                 this.newGame();
@@ -103,6 +108,10 @@ module SpaceWars.Core.States {
         generateBackground() {
             // Set background color
             this.game.stage.backgroundColor = '#000000';
+
+            //  The scrolling starfield background
+            this.background = this.game.add.tileSprite(0, 40, 2000, 600, 'background_stars');
+
         }
 
         isLoggedIn() {

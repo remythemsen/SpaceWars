@@ -5,11 +5,13 @@ module SpaceWars.Core.States {
         assets:any;
         currentLevel:number;
         playerState:any;
+		score:number;
 
-        init(assets:any, currentLevel:number, playerState:any) {
+        init(assets:any, currentLevel:number, playerState:any, score:number) {
             this.assets = assets;
             this.currentLevel = currentLevel;
             this.playerState = playerState;
+            this.score = score;
         }
 
         create() {
@@ -33,7 +35,7 @@ module SpaceWars.Core.States {
             }
         }
         continue() {
-            this.game.state.start('Arena', true, false, this.assets, this.currentLevel+1, this.playerState);
+            this.game.state.start('Arena', true, false, this.assets, this.currentLevel+1, this.playerState, this.score);
         }
         quit() {
             this.game.state.start('MainMenu', true, false);

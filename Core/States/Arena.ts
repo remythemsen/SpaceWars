@@ -4,6 +4,8 @@
 ///<reference path="../../Models/Abstract/Asset.ts"/>
 ///<reference path="../../Models/Concrete/User.ts"/>
 ///<reference path="../../Models/Abstract/Spaceship.ts"/>
+///<reference path="../../Collections/EnemyGroup.ts"/>
+
 module SpaceWars.Core.States {
     export class Arena extends Phaser.State {
 
@@ -45,7 +47,7 @@ module SpaceWars.Core.States {
         // PlayerState, the state on the player from previous game
         playerState: any;
         // The Enemies
-        enemies: Phaser.Group;
+        enemies: SpaceWars.Collections.EnemyGroup;
         // Time at which next enemy will enter the arena
         nextEnemySpawn: number;
         
@@ -61,6 +63,8 @@ module SpaceWars.Core.States {
         UIScore:Phaser.Text;
         // Current Combo Multipler
         UICombo: Phaser.Text;
+        // Control Help
+		UIControlHelp:Phaser.Text;
 
         /////////////////////////
         /* ##### Terrain ##### */
@@ -94,6 +98,7 @@ module SpaceWars.Core.States {
             // Settings for the Game should be set here
             this.totalEnemies = 20;
 
+
         }
 
         /* After Init has run, create is called 
@@ -121,6 +126,16 @@ module SpaceWars.Core.States {
 
             // Loading UI
             this.loadUI();
+
+            var classContext = this;
+
+			// Adding callback from removing help text at the start of the game.
+			this.game.input.keyboard.onDownCallback = function() {
+				if(classContext.UIControlHelp.visible) {
+					classContext.UIControlHelp.visible = false;
+				}
+			}
+
 
         }
 
@@ -181,6 +196,7 @@ module SpaceWars.Core.States {
             }, this);
 
 
+
             // #### CAMERA #### //
 
         }
@@ -188,8 +204,8 @@ module SpaceWars.Core.States {
         createMap()
         {
             // Setting Stage Settings
-            this.game.stage.width = 800;
-            this.game.stage.height = 640;
+            this.game.stage.width = 948;
+            this.game.stage.height = 600;
 
             // Set background color
             this.game.stage.backgroundColor = '#000000';
@@ -276,6 +292,10 @@ module SpaceWars.Core.States {
             this.UILevel.fixedToCamera = true;
             this.UILevel.cameraOffset.setTo(50, 90);
 
+            // ControlHelp
+            this.UIControlHelp = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Controls: Move with Arrow keys, Shoot with Space', {font:"18px Arial", fill:"#ffffff", align:"center"});
+			this.UIControlHelp.anchor.x = 0.5;
+
             // Updating Data
             this.updateUI();
 
@@ -288,7 +308,7 @@ module SpaceWars.Core.States {
 
         generateEnemies() {
             // Create Group Holding Enemies
-            this.enemies = this.game.add.group();
+            this.enemies = <SpaceWars.Collections.EnemyGroup> this.game.add.group();
             // GroupWide Settings
             this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
             this.enemies.enableBody = true;
@@ -326,7 +346,6 @@ module SpaceWars.Core.States {
                 var enemy : Models.Concrete.Enemy;
                 // Find an enemy which is not in the game, but is still alive
                 for (var i = 0; i < this.enemies.children.length; i++) {
-                    // TODO: Make array Typed by Enemy<>
                     if (this.enemies.children[i].alive === true && this.enemies.children[i].exists === false) {
                         // Grab Enemy
                         enemy = this.enemies.children[i];

@@ -15,7 +15,7 @@ module SpaceWars.Core {
 
         constructor() {
 
-            super(800, 640, Phaser.CANVAS, 'game_con', null);
+            super(948, 600, Phaser.CANVAS, 'game_con', null);
 
             this.state.add('Boot', States.Boot, false);
             this.state.add('Preloader', States.Preloader, false);
