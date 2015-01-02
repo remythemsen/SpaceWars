@@ -1,6 +1,7 @@
 ///<reference path="../../Vendor/phaser/phaser.d.ts"/>
 ///<reference path="../../Models/Concrete/Player.ts"/>
 ///<reference path="../../Models/Concrete/Enemy.ts"/>
+///<reference path="../../Models/Concrete/Bullet.ts"/>
 ///<reference path="../../Models/Abstract/Asset.ts"/>
 ///<reference path="../../Models/Concrete/User.ts"/>
 ///<reference path="../../Models/Abstract/Spaceship.ts"/>
@@ -16,6 +17,7 @@ module SpaceWars.Core.States {
         ///////////////////////////////
         /* ##### Game Settings ##### */ 
         ///////////////////////////////
+		testProp:string;
 
 
         /////////////////////////////////
@@ -80,6 +82,14 @@ module SpaceWars.Core.States {
         nextPropSpawn: number;        
 
 
+        /////////////////////////
+        /* ##### Bullets ##### */
+        /////////////////////////
+
+		// A Group of Bullets, which is able to get fired of.
+		bullets:Phaser.Group;
+
+
         /*!!!!!!!!!!!!!!!!!!!!!!!!*/
         /*!!!!!!!!!METHODS!!!!!!!!*/
         /*!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -98,7 +108,6 @@ module SpaceWars.Core.States {
             // Settings for the Game should be set here
             this.totalEnemies = 20;
 
-
         }
 
         /* After Init has run, create is called 
@@ -113,6 +122,14 @@ module SpaceWars.Core.States {
 
             // Get Terrain Assets
             this.getTerrainPropsList();
+
+            // Get Bullets Ready
+            // Populating Bullets
+			this.bullets = this.game.add.group();
+			this.bullets.addMultiple(this.generateBullets());
+			// Removing the Sprite from Rendering and Physics when it's out of bounds.
+			this.bullets.setAll('checkWorldBounds', true);
+			this.bullets.setAll('outOfBoundsKill', true);
 
             // Spawning the Player
             this.spawnPlayer();
@@ -152,11 +169,11 @@ module SpaceWars.Core.States {
              //#### Collisions #### //
 
              //Hitting enemies with bullets
-            this.game.physics.arcade.overlap(this.player.bullets, this.enemies, this.enemyHit, null, this);
+            this.game.physics.arcade.overlap(this.bullets, this.enemies, this.enemyHit, null, this);
 
              //Player hit by enemies
             this.enemies.forEachExists(function(enemy) {
-                this.game.physics.arcade.overlap(enemy.bullets, this.player, this.playerHit, null, this);
+                this.game.physics.arcade.overlap(this.bullets, this.player, this.playerHit, null, this);
             }, this);
 
 
@@ -367,10 +384,45 @@ module SpaceWars.Core.States {
             }
         }
 
+		// Generating a Collection of Bullets
+		private generateBullets() : Array<Models.Concrete.Bullet> {
+			
+			var bullets = new Array<Models.Concrete.Bullet>();
+
+            // Creating some bullets
+            for (var i = 0, bullet:Models.Concrete.Bullet; i < 50; i++) {
+
+                //adding bullet to the game
+            	bullet = new Models.Concrete.Bullet(this.game, 0, 0,'yellow_bullet');
+            	// Adding Bullet to the Game
+            	bullet = this.game.add.existing(bullet);
+				// Enabling physics on bullet
+				this.game.physics.arcade.enable(bullet);
+
+                // Setting pivot / scale point to be in center of bullet sprite
+                bullet.anchor.set(0.5);
+                bullet.smoothed = false; 
+                //scaling down bullet size
+                bullet.scale.x = 0.5;
+                bullet.scale.y = 0.5;
+
+                bullet.kill();
+
+                bullets.push(bullet);
+
+            }
+
+			
+
+			return bullets;
+			
+		}
+
         spawnPlayer() {
 
             // Initializing the Player
             this.player = new Models.Concrete.Player(this.game, 150, this.game.world.centerY, 'rust_burner_2');
+            console.log(this.testProp);
 
             // Updating player from passed State object.
             if(this.playerState) {
@@ -401,54 +453,65 @@ module SpaceWars.Core.States {
 
         // #### Collision Handlers #### //
 
-        enemyHit(bullet, enemy) {
+        enemyHit(bullet:Models.Concrete.Bullet, enemy:Models.Concrete.Enemy) {
 
-            bullet.kill();
+			if(bullet.getOwner() === enemy) {
+				console.log('dont worry!');
 
-            var damage = this.game.rnd.integerInRange(this.player.minDmg, this.player.maxDmg);
+			} else {
 
-            enemy.health -= damage;
-            
-            // Add sprite with number of damage dealt
-            var dmgShow = this.game.add.text(enemy.body.x - (enemy.body.width / 2), enemy.body.y - 20, damage.toString(), {font: "16px Arial", fill: "#ffffff"});
-
-            dmgShow.anchor.x = 0.5;
-            dmgShow.anchor.y = 0.5;
-
-            // Tween the sprite
-            var tween = this.game.add.tween(dmgShow).to({ alpha: 0, y:dmgShow.y - 20}, 1000, Phaser.Easing.Linear.None, true, 0);
-            tween.onComplete.add(function ()
-            {
-                // Destroying the sprite
-                dmgShow.destroy();
-
-            });
+			
 
 
-            if(enemy.health < 1) {
+				bullet.kill();
 
-                // Kill the enemy
-                enemy.kill();
+				var damage = bullet.getDamage();
 
-                this.explode(enemy);
+				enemy.health -= damage;
+				
+				// Add sprite with number of damage dealt
+				var dmgShow = this.game.add.text(enemy.body.x - (enemy.body.width / 2), enemy.body.y - 20, damage.toString(), {font: "16px Arial", fill: "#ffffff"});
 
-                // Update score
-                this.score += (2 * this.level);
-                this.updateUI();
+				dmgShow.anchor.x = 0.5;
+				dmgShow.anchor.y = 0.5;
+
+				// Tween the sprite
+				var tween = this.game.add.tween(dmgShow).to({ alpha: 0, y:dmgShow.y - 20}, 1000, Phaser.Easing.Linear.None, true, 0);
+				tween.onComplete.add(function ()
+				{
+					// Destroying the sprite
+					dmgShow.destroy();
+
+				});
 
 
-                // If No more enemies is alive
-                if (this.enemies.countLiving() <= 0) {
-                    // Advance to next level.
-                    this.nextLevel();
-                }
-            }
+				if(enemy.health < 1) {
+
+					// Kill the enemy
+					enemy.kill();
+
+					this.explode(enemy);
+
+					// Update score
+					this.score += (2 * this.level);
+					this.updateUI();
+
+
+					// If No more enemies is alive
+					if (this.enemies.countLiving() <= 0) {
+						// Advance to next level.
+						this.nextLevel();
+					}
+				}
+			}
         }
 
-        playerHit(player, bullet) {
+        playerHit(player:Models.Concrete.Player, bullet:Models.Concrete.Bullet) {
             bullet.kill();
 
-            player.health -= 1;
+            // Taking some Damage
+            player.health -= bullet.getDamage();
+            console.log(bullet.getDamage());
 
             this.updateUI();
 
