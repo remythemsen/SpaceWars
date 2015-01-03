@@ -28,10 +28,6 @@ module SpaceWars.Core.States {
 
         create() {
 
-            // Resizing world
-            this.game.world.width = 800;
-            this.game.world.height = 640;
-
             // generating background
             this.generateBackground();
 

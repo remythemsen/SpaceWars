@@ -58,6 +58,8 @@ module SpaceWars.Core.States {
 
         // Player health
         UIHealth:Phaser.Text;
+        // Healthbar
+		UIHealthBar:Phaser.Graphics;
         // Current Level
         UILevel:Phaser.Text;
         // Current Score
@@ -97,13 +99,14 @@ module SpaceWars.Core.States {
         *  when the state starts 
         */
 
-        init(assets: any, level: number = 1, playerState?: any, score:number = 0)
+        init(assets: any, level: number = 1, playerState?: any, score:number = 0, combo:number = 0)
         {
             // Grabbing Information from Former level (if any)
             this.level = level;
             this.assets = assets;
             this.score = score;
             this.playerState = playerState;
+			this.combo = combo;
 
             // Settings for the Game should be set here
             this.totalEnemies = 20;
@@ -297,17 +300,33 @@ module SpaceWars.Core.States {
             // Player Health
             this.UIHealth = this.game.add.text(0, 0, '', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
             this.UIHealth.fixedToCamera = true;
-            this.UIHealth.cameraOffset.setTo(50, 50);
+            this.UIHealth.cameraOffset.setTo(10, 10);
+
+            // Health bar
+            this.UIHealthBar = this.game.add.graphics(0,0);
+			var color = 0xFF3300;
+			this.UIHealthBar.lineStyle(15, color, 1);
+			this.UIHealthBar.moveTo(10,40);
+			this.UIHealthBar.lineTo(200, 40);
+
+            // Current Combo
+            this.UICombo = this.game.add.text(0, 0, '', {font:"14px press_start_2pregular", fill:"#ffffff", align:"center"});
+            this.UICombo.fixedToCamera = true;
+            this.UICombo.cameraOffset.setTo(this.game.world.centerX, 10);
+            this.UICombo.anchor.x = 0.5;
 
             // Current Score
             this.UIScore = this.game.add.text(0,0,'', {font:"10px press_start_2pregular", fill: "#ffffff", align:"center"});
             this.UIScore.fixedToCamera = true;
-            this.UIScore.cameraOffset.setTo(50, 70);
+            this.UIScore.cameraOffset.setTo(this.game.world.centerX, 40);
+            this.UIScore.anchor.x = 0.5;
 
             // Current Level
             this.UILevel = this.game.add.text(0,0,'', {font:"10px press_start_2pregular", fill: "#ffffff", align:"center"});
             this.UILevel.fixedToCamera = true;
-            this.UILevel.cameraOffset.setTo(50, 90);
+            this.UILevel.cameraOffset.setTo(10, ((this.game.world.height - this.UILevel.height) - 10));
+
+
 
             // ControlHelp
             this.UIControlHelp = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Controls: Move with Arrow keys, Shoot with Space', {font:"12px press_start_2pregular", fill:"#ffffff", align:"center"});
@@ -320,7 +339,21 @@ module SpaceWars.Core.States {
         updateUI() : void {
             this.UIScore.setText('Score: ' + this.score.toString());
             this.UIHealth.setText('Health: ' + this.player.health.toString());
+            // Update Healthbar aswell
+            // removing old healthbar
+            this.UIHealthBar.clear();
+			// Calculating color
+			var x = (this.player.health / this.player._maxHealth) * 100;
+			var color:number = <number> this.convertToHex((x > 50 ? 1-2*(x-50)/100.0 : 1.0) * 255, (x > 50 ? 1.0 : 2*x/100.0) * 255, 0);
+			// Redrawing health bar 
+			this.UIHealthBar.lineStyle(15, color, 1);
+			this.UIHealthBar.moveTo(10,40);
+			var value = ((this.player.health / this.player._maxHealth) * 100) * 2;
+			this.UIHealthBar.lineTo(value, 40);
+
+
             this.UILevel.setText('Level: ' + this.level.toString());
+            this.UICombo.setText('Combo x' + this.combo.toString());
         }
 
         generateEnemies() {
@@ -347,6 +380,8 @@ module SpaceWars.Core.States {
 
                 // Setting health
                 enemy.health = 15 * this.level;
+
+                enemy._maxHealth = enemy.health;
 
                 // Setting damage 
                 enemy._damage = 10 * (this.level);
@@ -431,6 +466,7 @@ module SpaceWars.Core.States {
                 this.player.health = this.playerState.health;
             } else {
                 this.player.health = 100;
+                this.player._maxHealth = this.player.health;
             }
 
             // keeping the player inside map bounds
@@ -488,8 +524,11 @@ module SpaceWars.Core.States {
 
 					this.explode(enemy);
 
+					// update combo
+					this.combo += 1;
+
 					// Update score
-					this.score += (2 * this.level);
+					this.score += (1 * this.level * this.combo);
 					this.updateUI();
 
 
@@ -510,6 +549,9 @@ module SpaceWars.Core.States {
 
 				// Taking some Damage
 				player.health -= bullet.getDamage();
+
+				// update combo
+				this.combo = 0;
 
 				this.updateUI();
 
@@ -572,12 +614,19 @@ module SpaceWars.Core.States {
                 health: this.player.health
             };
 
-            this.game.state.start('LevelUp', true, false, this.assets, this.level, playerState, this.score);
+            this.game.state.start('LevelUp', true, false, this.assets, this.level, playerState, this.score, this.combo);
         }
 
         endGame() {
             // To Highscores State
             this.game.state.start('GameOver', true, false, this.assets, this.score);
+        }
+
+
+        // #### UTILS #### //
+        convertToHex(r:number, g:number, b:number) : number {
+    		var result = "0x" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    		return +result;
         }
 
 

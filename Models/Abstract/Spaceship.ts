@@ -23,6 +23,8 @@ module SpaceWars.Models.Abstract {
 		_bulletSpeed:number;
 		// Opposite Direction, If the Spaceship is heading left
 		_oppositeDirection:boolean;
+		// Max Health
+		_maxHealth:number;
 
 		constructor(game:Phaser.Game, x:number, y:number, key:any, speed:number, damage:number, fireRate:number, bulletSpeed:number, oppositeDirection:boolean = false) {
 			//# Setting Sprite Properties

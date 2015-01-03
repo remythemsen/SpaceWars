@@ -6,18 +6,17 @@ module SpaceWars.Core.States {
         currentLevel:number;
         playerState:any;
 		score:number;
+		combo:number;
 
-        init(assets:any, currentLevel:number, playerState:any, score:number) {
+        init(assets:any, currentLevel:number, playerState:any, score:number, combo:number) {
             this.assets = assets;
             this.currentLevel = currentLevel;
             this.playerState = playerState;
             this.score = score;
+            this.combo = combo;
         }
 
         create() {
-            // Reset World Size
-            this.game.world.width = 800;
-            this.game.world.height = 640;
 
             // Header
             var header = this.game.add.text(400, 100 , 'Level Up!, press spacebar to continue', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
@@ -35,7 +34,7 @@ module SpaceWars.Core.States {
             }
         }
         continue() {
-            this.game.state.start('Arena', true, false, this.assets, this.currentLevel+1, this.playerState, this.score);
+            this.game.state.start('Arena', true, false, this.assets, this.currentLevel+1, this.playerState, this.score, this.combo);
         }
         quit() {
             this.game.state.start('MainMenu', true, false);
