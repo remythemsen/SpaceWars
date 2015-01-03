@@ -20,7 +20,7 @@ module SpaceWars.Core.States {
             this.game.world.height = 640;
 
             // Header
-            var header = this.game.add.text(400, 100 , 'Level Up!, press spacebar to continue', { font: "16px Arial", fill: "#ffffff", align: "center" });
+            var header = this.game.add.text(400, 100 , 'Level Up!, press spacebar to continue', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
             header.fixedToCamera = true;
             header.cameraOffset.setTo((this.game.world.centerX) - header.width / 2, 50);
 

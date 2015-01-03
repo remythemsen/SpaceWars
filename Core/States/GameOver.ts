@@ -36,15 +36,15 @@ module SpaceWars.Core.States {
             this.generateBackground();
 
             // Heading
-            var heading = this.game.add.text(this.game.world.centerX, 100, 'Game Over!', { font: "16px Arial", fill: "#ffffff", align: "center" });
+            var heading = this.game.add.text(this.game.world.centerX, 100, 'Game Over!', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
             heading.anchor.set(0.5,0.5);
 
             // Game Debreif info
-            var displayScore = this.game.add.text(this.game.world.centerX, 130, 'You Scored: ' + this.score, { font: "12px Arial", fill: "#ffffff", align: "center" });
+            var displayScore = this.game.add.text(this.game.world.centerX, 130, 'You Scored: ' + this.score, { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
             displayScore.anchor.set(0.5,0.5);
 
             // Instructions
-            var controlInstructions = this.game.add.text(this.game.world.centerX, 170, 'Press Space to restart, or Q to exit to menu', { font: "12px Arial", fill: "#ffffff", align: "center" });
+            var controlInstructions = this.game.add.text(this.game.world.centerX, 170, 'Press Space to restart, or Q to exit to menu', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
             controlInstructions.anchor.set(0.5,0.5);
 
             var userId = this.isLoggedIn();
@@ -54,7 +54,7 @@ module SpaceWars.Core.States {
                 var oldScore = this.scoreRepo.getPlayersHighscore(userId);
 
                 if(oldScore) {
-                    var displayOldScore = this.game.add.text(this.game.world.centerX, 150, 'Previous Highscore: '+oldScore, { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    var displayOldScore = this.game.add.text(this.game.world.centerX, 150, 'Previous Highscore: '+oldScore, { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
                     displayOldScore.anchor.set(0.5,0.5);
                 }
 
@@ -65,10 +65,10 @@ module SpaceWars.Core.States {
             } else {
 
                 // Instructions
-                var notLoggedInMessage = this.game.add.text(this.game.world.centerX, 200, "Can't Save Score, You must be logged in!", { font: "12px Arial", fill: "#ffffff", align: "center" });
+                var notLoggedInMessage = this.game.add.text(this.game.world.centerX, 200, "Can't Save Score, You must be logged in!", { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                 notLoggedInMessage.anchor.set(0.5,0.5);
 
-                var loginButton = this.game.add.text(this.game.world.centerX, 230, "Log-in", { font: "12px Arial", fill: "#ffffff", align: "center" });
+                var loginButton = this.game.add.text(this.game.world.centerX, 230, "Log-in", { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                 loginButton.anchor.set(0.5,0.5);
                 loginButton.inputEnabled = true;
                 loginButton.events.onInputDown.add(this.redirectToLoginPage, this);

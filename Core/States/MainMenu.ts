@@ -24,24 +24,24 @@ module SpaceWars.Core.States
             this.generateBackground();
 
             // Header
-            var heading = this.game.add.text(this.game.world.centerX, 100, 'MAIN MENU', { font: "16px Arial", fill: "#ffffff", align: "center" });
+            var heading = this.game.add.text(this.game.world.centerX, 100, 'MAIN MENU', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
             heading.anchor.set(0.5, 0.5);
 
             // Button to start the game
-            var startGameButton = this.game.add.text(this.game.world.centerX, 150, 'Start Game', { font: "12px Arial", fill: "#ffffff", align: "center" });
+            var startGameButton = this.game.add.text(this.game.world.centerX, 150, 'Start Game', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
             startGameButton.anchor.set(0.5, 0.5);
             startGameButton.inputEnabled = true;
             startGameButton.events.onInputDown.add(this.startGame, this);
 
             // View HighScores button
-            var highscoresButton = this.game.add.text(this.game.world.centerX, 180, 'HighScores', { font: "12px Arial", fill: "#ffffff", align: "center" });
+            var highscoresButton = this.game.add.text(this.game.world.centerX, 180, 'HighScores', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
             highscoresButton.anchor.set(0.5, 0.5);
             highscoresButton.inputEnabled = true;
             highscoresButton.events.onInputDown.add(this.startHighscores, this);
 
             if (this.authService.isLoggedIn()) {
                 // Logout Button
-                var logoutButton = this.game.add.text(this.game.world.centerX, 210, 'Logout', { font: "12px Arial", fill: "#ffffff", align: "center" });
+                var logoutButton = this.game.add.text(this.game.world.centerX, 210, 'Logout', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                 logoutButton.anchor.set(0.5, 0.5);
                 logoutButton.inputEnabled = true;
                 logoutButton.events.onInputDown.add(this.logout, this);

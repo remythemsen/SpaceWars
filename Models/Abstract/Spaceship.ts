@@ -1,4 +1,5 @@
 ///<reference path="../../Vendor/phaser/phaser.d.ts"/>
+///<reference path="../../Core/States/Arena.ts"/>
 ///<reference path="../Concrete/Bullet.ts"/>
 
 module SpaceWars.Models.Abstract {
@@ -50,6 +51,10 @@ module SpaceWars.Models.Abstract {
 				//# Adjusting to Opposite Direction
 				// flipping enemies to face the player
 				this.scale.x = -1;
+
+				// Flip bullet direction
+                this._bulletSpeed = this._bulletSpeed - (this._bulletSpeed + this._bulletSpeed);
+
 			}
 		}
 
@@ -59,6 +64,36 @@ module SpaceWars.Models.Abstract {
 		
 		/* Methods */
 		
+		public shoot() : void {
+
+			var bullets:Phaser.Group;
+
+			// Grab bullets group array reference from active state
+			try {
+				var currentState:Core.States.Arena = <Core.States.Arena> this.game.state.getCurrentState();
+				bullets = currentState.bullets;
+			} catch(e) {
+				throw new Error('Could not get bullets from current state '+e);
+			}
+
+            // Fire a shot if the weapon is ready.
+            if (this.game.time.now > this._nextFire && currentState.bullets.countDead() > 0)
+            {
+                // Setting point in future time for next allowed shot.
+                this._nextFire = this.game.time.now + this._fireRate;
+                // Grab a bullet from the generated list
+                var bullet:Models.Concrete.Bullet = currentState.bullets.getFirstDead();
+                // Setting Damage on bullet
+                bullet._damage = this._damage;
+                // Setting owner of bullet
+                bullet._owner = this;
+				// Set bullet position
+                bullet.reset((this.body.x + (this.body.width / 2)), (this.body.y + (this.height) /2));
+				// Set bullet direction and speed
+                bullet.body.velocity.x = this._bulletSpeed;
+            }
+			 
+		}
 
 
 		

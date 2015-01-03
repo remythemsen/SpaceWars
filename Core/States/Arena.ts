@@ -17,7 +17,6 @@ module SpaceWars.Core.States {
         ///////////////////////////////
         /* ##### Game Settings ##### */ 
         ///////////////////////////////
-		testProp:string;
 
 
         /////////////////////////////////
@@ -104,6 +103,7 @@ module SpaceWars.Core.States {
             this.level = level;
             this.assets = assets;
             this.score = score;
+            this.playerState = playerState;
 
             // Settings for the Game should be set here
             this.totalEnemies = 20;
@@ -207,7 +207,7 @@ module SpaceWars.Core.States {
                 if (enemy.x + enemy.width < 0) {
                     // Resetting position
                     enemy.body.x = this.game.world.width + enemy.body.width;
-                    enemy.body.y = this.game.world.centerY;
+                    enemy.body.y = this.game.rnd.integerInRange(this.game.world.y, this.game.world.height);
                     enemy.body.velocity.x = -200;
                 }
             }, this);
@@ -288,29 +288,29 @@ module SpaceWars.Core.States {
             prop.body.velocity.x = -200;
 
             // When is next spawn
-            this.nextPropSpawn = this.game.time.now + this.game.rnd.integerInRange(500, 5000); 
+            this.nextPropSpawn = this.game.time.now + this.game.rnd.integerInRange(500, 2000); 
         }
 
         // #### User Interface ####
         loadUI() : void {
 
             // Player Health
-            this.UIHealth = this.game.add.text(0, 0, '', { font: "16px Arial", fill: "#ffffff", align: "center" });
+            this.UIHealth = this.game.add.text(0, 0, '', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
             this.UIHealth.fixedToCamera = true;
             this.UIHealth.cameraOffset.setTo(50, 50);
 
             // Current Score
-            this.UIScore = this.game.add.text(0,0,'', {font:"16px Arial", fill: "#ffffff", align:"center"});
+            this.UIScore = this.game.add.text(0,0,'', {font:"10px press_start_2pregular", fill: "#ffffff", align:"center"});
             this.UIScore.fixedToCamera = true;
             this.UIScore.cameraOffset.setTo(50, 70);
 
             // Current Level
-            this.UILevel = this.game.add.text(0,0,'', {font:"16px Arial", fill: "#ffffff", align:"center"});
+            this.UILevel = this.game.add.text(0,0,'', {font:"10px press_start_2pregular", fill: "#ffffff", align:"center"});
             this.UILevel.fixedToCamera = true;
             this.UILevel.cameraOffset.setTo(50, 90);
 
             // ControlHelp
-            this.UIControlHelp = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Controls: Move with Arrow keys, Shoot with Space', {font:"18px Arial", fill:"#ffffff", align:"center"});
+            this.UIControlHelp = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Controls: Move with Arrow keys, Shoot with Space', {font:"12px press_start_2pregular", fill:"#ffffff", align:"center"});
 			this.UIControlHelp.anchor.x = 0.5;
 
             // Updating Data
@@ -348,6 +348,9 @@ module SpaceWars.Core.States {
                 // Setting health
                 enemy.health = 15 * this.level;
 
+                // Setting damage 
+                enemy._damage = 10 * (this.level);
+
                 // Adding the enemy to group
                 this.enemies.add(enemy);
 
@@ -375,7 +378,7 @@ module SpaceWars.Core.States {
                     enemy.exists = true;
                     // Resetting position
                     enemy.body.x = this.game.world.width + enemy.body.width;
-                    enemy.body.y = this.game.world.centerY;
+                    enemy.body.y = this.game.rnd.integerInRange(this.game.world.y, this.game.world.height);
                     // Setting Movement Speed on prop 
                     enemy.body.velocity.x = -200;
                     // When is next spawn
@@ -422,13 +425,12 @@ module SpaceWars.Core.States {
 
             // Initializing the Player
             this.player = new Models.Concrete.Player(this.game, 150, this.game.world.centerY, 'rust_burner_2');
-            console.log(this.testProp);
 
             // Updating player from passed State object.
             if(this.playerState) {
                 this.player.health = this.playerState.health;
             } else {
-                this.player.health = 3;
+                this.player.health = 100;
             }
 
             // keeping the player inside map bounds
@@ -455,13 +457,7 @@ module SpaceWars.Core.States {
 
         enemyHit(bullet:Models.Concrete.Bullet, enemy:Models.Concrete.Enemy) {
 
-			if(bullet.getOwner() === enemy) {
-				console.log('dont worry!');
-
-			} else {
-
-			
-
+			if(bullet.getOwner() !== enemy) {
 
 				bullet.kill();
 
@@ -470,7 +466,7 @@ module SpaceWars.Core.States {
 				enemy.health -= damage;
 				
 				// Add sprite with number of damage dealt
-				var dmgShow = this.game.add.text(enemy.body.x - (enemy.body.width / 2), enemy.body.y - 20, damage.toString(), {font: "16px Arial", fill: "#ffffff"});
+				var dmgShow = this.game.add.text(enemy.body.x - (enemy.body.width / 2), enemy.body.y - 20, damage.toString(), {font: "10px press_start_2pregular", fill: "#ffffff"});
 
 				dmgShow.anchor.x = 0.5;
 				dmgShow.anchor.y = 0.5;
@@ -503,25 +499,26 @@ module SpaceWars.Core.States {
 						this.nextLevel();
 					}
 				}
+
 			}
-        }
+		}
 
         playerHit(player:Models.Concrete.Player, bullet:Models.Concrete.Bullet) {
-            bullet.kill();
+			if(bullet.getOwner() !== player) {
 
-            // Taking some Damage
-            player.health -= bullet.getDamage();
-            console.log(bullet.getDamage());
+				bullet.kill();
 
-            this.updateUI();
+				// Taking some Damage
+				player.health -= bullet.getDamage();
 
-            if(this.player.health < 1) {
-                player.kill();
-                this.endGame();
-            }
+				this.updateUI();
+
+				if(this.player.health < 1) {
+					player.kill();
+					this.endGame();
+				}
+			}
         }
-
-
 
         // #### AI #### //
 

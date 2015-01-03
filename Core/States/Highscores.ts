@@ -19,7 +19,7 @@ module SpaceWars.Core.States {
             // Creating background
             this.generateBackground();
 
-            var heading = this.game.add.text(this.game.world.centerX, 100, 'HIGHSCORES! - press B to return to menu', { font: "16px Arial", fill: "#ffffff", align: "center" });
+            var heading = this.game.add.text(this.game.world.centerX, 100, 'HIGHSCORES! - press B to return to menu', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
             heading.anchor.set(0.5,0.5);
 
             var scores = this.scoreRepo.getTopTen();
@@ -30,7 +30,7 @@ module SpaceWars.Core.States {
 
                 marginTop = marginTop+20;
 
-               var score = this.game.add.text(this.game.world.centerX, marginTop, s.name+' - '+s.score, { font: "10px Arial", fill: "#ffffff", align: "center" });
+               var score = this.game.add.text(this.game.world.centerX, marginTop, s.name+' - '+s.score, { font: "7px press_start_2pregular", fill: "#ffffff", align: "center" });
             });
 
 

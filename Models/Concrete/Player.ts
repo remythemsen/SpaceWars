@@ -5,7 +5,7 @@
 module SpaceWars.Models.Concrete {
 
     /*
-    * This is the player object.
+    * This is the player class.
     *
     *
     */
@@ -43,28 +43,10 @@ module SpaceWars.Models.Concrete {
             else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
                 this.body.velocity.x = 450;
                 this.play('advancing');
+            } else {
+            	this.play('idle');
             }
-        }
-
-        // Fires a shot
-        shoot() : void {
-        	console.log('playershoot');
-
-            var stateManager = this.game.state;
-            var state:Core.States.Arena = <Core.States.Arena> stateManager.getCurrentState();
-
-            if (this.game.time.now > this._nextFire && state.bullets.countDead() > 0)
-            {
-                this._nextFire = this.game.time.now + this._fireRate;
-
-                var bullet:Models.Concrete.Bullet = state.bullets.getFirstDead();
-                // Setting damage for bullet
-                bullet._damage = this._damage;
-
-                bullet.reset((this.body.x + (this.body.width / 2)), (this.body.y + (this.height) /2));
-
-                bullet.body.velocity.x = this._bulletSpeed;
-            }
+			
         }
     }
 }
