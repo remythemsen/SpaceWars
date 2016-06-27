@@ -15,10 +15,13 @@
 body {
     background-image: url("../images/background_tile.png");
     background-repeat: repeat;
+    padding:0;
+    margin:0;
 }
 
 #content {
     padding:20px;
+    background: rgba(48, 32, 154, 0.58);
 }
 
 #page-header {
