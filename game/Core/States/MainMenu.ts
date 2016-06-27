@@ -39,13 +39,6 @@ module SpaceWars.Core.States
             highscoresButton.inputEnabled = true;
             highscoresButton.events.onInputDown.add(this.startHighscores, this);
 
-            if (this.authService.isLoggedIn()) {
-                // Logout Button
-                var logoutButton = this.game.add.text(this.game.world.centerX, 210, 'Logout', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
-                logoutButton.anchor.set(0.5, 0.5);
-                logoutButton.inputEnabled = true;
-                logoutButton.events.onInputDown.add(this.logout, this);
-            }
 
         }
         update() : void {

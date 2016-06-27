@@ -19,20 +19,18 @@ body {
 
 #content {
     padding:20px;
-    background-color:#15102a
 }
-
 
 #page-header {
     padding:20px 0 0 0;
 }
 
 .main-navigation {
-    text-align:right;
+    text-align:center;
+    padding:0;
 }
 .main-navigation li {
     display:inline;
-    margin-left:20px;
 }
 .main-navigation a {
     text-decoration:none;

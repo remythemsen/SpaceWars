@@ -35,19 +35,6 @@ var SpaceWars;
 })(SpaceWars || (SpaceWars = {}));
 var SpaceWars;
 (function (SpaceWars) {
-    var Repositories;
-    (function (Repositories) {
-        var Repository = (function () {
-            function Repository() {
-                this.serviceUrl = 'http://localhost/spacewars/public/';
-            }
-            return Repository;
-        }());
-        Repositories.Repository = Repository;
-    })(Repositories = SpaceWars.Repositories || (SpaceWars.Repositories = {}));
-})(SpaceWars || (SpaceWars = {}));
-var SpaceWars;
-(function (SpaceWars) {
     var Models;
     (function (Models) {
         var Abstract;
@@ -61,7 +48,6 @@ var SpaceWars;
         })(Abstract = Models.Abstract || (Models.Abstract = {}));
     })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
 })(SpaceWars || (SpaceWars = {}));
-///<reference path="Repository.ts"/>
 ///<reference path="../Models/Abstract/Asset.ts"/>
 ///<reference path="../Interfaces/IAsset.ts"/>
 ///<reference path="../Vendor/jquery/jquery.d.ts"/>
@@ -69,32 +55,46 @@ var SpaceWars;
 (function (SpaceWars) {
     var Repositories;
     (function (Repositories) {
-        var AssetRepo = (function (_super) {
-            __extends(AssetRepo, _super);
+        var AssetRepo = (function () {
             function AssetRepo() {
-                // Constructing Parent Class
-                _super.call(this);
             }
             AssetRepo.prototype.getAll = function () {
                 // Creating reference to Assets Array (to use inside ajax call)
                 var assets = new Array();
                 var asset;
                 asset = new SpaceWars.Models.Abstract.Asset();
-                asset.id = 100;
-                asset.name = 'rust_burner_1';
+                asset.id = 0;
+                asset.name = 'background';
+                asset.asset_key = 'background_stars';
+                asset.type = 'background';
+                asset.path = 'assets/images/background_tile.png';
+                asset.width = 500;
+                asset.height = 500;
+                assets.push(asset);
+                // Space ships
+                asset = new SpaceWars.Models.Abstract.Asset();
+                asset.id = 1;
+                asset.name = 'rust burner 1AZ';
+                asset.asset_key = 'rust_burner_1';
+                asset.type = 'spaceship';
+                asset.path = 'assets/spritesheets/rust_burner_1.png';
+                asset.width = 50;
+                asset.height = 25;
+                assets.push(asset);
+                asset = new SpaceWars.Models.Abstract.Asset();
+                asset.id = 2;
+                asset.name = 'rust burner 1BZ';
                 asset.asset_key = 'rust_burner_2';
                 asset.type = 'spaceship';
                 asset.path = 'assets/spritesheets/rust_burner_2.png';
-                asset.width = 46;
-                asset.height = 25;
-                asset.created_at = '0';
-                asset.update_at = '0';
+                asset.width = 44;
+                asset.height = 18;
                 assets.push(asset);
                 // terrain
                 asset = new SpaceWars.Models.Abstract.Asset();
-                asset.id = 101;
+                asset.id = 3;
                 asset.name = 'terrain_rock_1';
-                asset.asset_key = '101';
+                asset.asset_key = 'redrock';
                 asset.type = 'terrain';
                 asset.path = 'assets/spritesheets/terrain_rock_1.png';
                 asset.width = 57;
@@ -102,10 +102,45 @@ var SpaceWars;
                 asset.created_at = '0';
                 asset.update_at = '0';
                 assets.push(asset);
+                asset = new SpaceWars.Models.Abstract.Asset();
+                asset.id = 4;
+                asset.name = 'terrain_rock_2';
+                asset.asset_key = 'redrock2';
+                asset.type = 'terrain';
+                asset.path = 'assets/spritesheets/terrain_rock_2.png';
+                asset.width = 47;
+                asset.height = 23;
+                asset.created_at = '0';
+                asset.update_at = '0';
+                assets.push(asset);
+                // Bullet
+                asset = new SpaceWars.Models.Abstract.Asset();
+                asset.id = 5;
+                asset.name = 'bullet';
+                asset.asset_key = 'yellow_bullet';
+                asset.type = 'bullet';
+                asset.path = 'assets/spritesheets/bullet.png';
+                asset.width = 20;
+                asset.height = 7;
+                asset.created_at = '0';
+                asset.update_at = '0';
+                assets.push(asset);
+                // Explosion
+                asset = new SpaceWars.Models.Abstract.Asset();
+                asset.id = 6;
+                asset.name = 'explosion_1';
+                asset.asset_key = 'explosion_1';
+                asset.type = 'bullet';
+                asset.path = 'assets/spritesheets/explosion_1.png';
+                asset.width = 64;
+                asset.height = 64;
+                asset.created_at = '0';
+                asset.update_at = '0';
+                assets.push(asset);
                 return assets;
             };
             return AssetRepo;
-        }(Repositories.Repository));
+        }());
         Repositories.AssetRepo = AssetRepo;
     })(Repositories = SpaceWars.Repositories || (SpaceWars.Repositories = {}));
 })(SpaceWars || (SpaceWars = {}));
@@ -232,29 +267,23 @@ var SpaceWars;
                 };
                 MainMenu.prototype.create = function () {
                     this.generateBackground();
-                    // Resizing world
-                    this.game.world.width = 800;
-                    this.game.world.height = 640;
                     // Header
-                    var heading = this.game.add.text(this.game.world.centerX, 100, 'MAIN MENU', { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    var heading = this.game.add.text(this.game.world.centerX, 100, 'MAIN MENU', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
                     heading.anchor.set(0.5, 0.5);
                     // Button to start the game
-                    var startGameButton = this.game.add.text(this.game.world.centerX, 150, 'Start Game', { font: "12px Arial", fill: "#ffffff", align: "center" });
+                    var startGameButton = this.game.add.text(this.game.world.centerX, 150, 'Start Game', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                     startGameButton.anchor.set(0.5, 0.5);
                     startGameButton.inputEnabled = true;
                     startGameButton.events.onInputDown.add(this.startGame, this);
                     // View HighScores button
-                    var highscoresButton = this.game.add.text(this.game.world.centerX, 180, 'HighScores', { font: "12px Arial", fill: "#ffffff", align: "center" });
+                    var highscoresButton = this.game.add.text(this.game.world.centerX, 180, 'HighScores', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                     highscoresButton.anchor.set(0.5, 0.5);
                     highscoresButton.inputEnabled = true;
                     highscoresButton.events.onInputDown.add(this.startHighscores, this);
-                    if (this.authService.isLoggedIn()) {
-                        // Logout Button
-                        var logoutButton = this.game.add.text(this.game.world.centerX, 210, 'Logout', { font: "12px Arial", fill: "#ffffff", align: "center" });
-                        logoutButton.anchor.set(0.5, 0.5);
-                        logoutButton.inputEnabled = true;
-                        logoutButton.events.onInputDown.add(this.logout, this);
-                    }
+                };
+                MainMenu.prototype.update = function () {
+                    //  Scroll the background
+                    this.background.tilePosition.y -= 0.2;
                 };
                 MainMenu.prototype.startGame = function () {
                     this.game.state.start('Arena', true, false, this.assets);
@@ -269,6 +298,8 @@ var SpaceWars;
                 MainMenu.prototype.generateBackground = function () {
                     // Set background color
                     this.game.stage.backgroundColor = '#000000';
+                    //  The scrolling starfield background
+                    this.background = this.game.add.tileSprite(0, 40, 2000, 600, 'background_stars');
                 };
                 return MainMenu;
             }(Phaser.State));
@@ -276,94 +307,7 @@ var SpaceWars;
         })(States = Core.States || (Core.States = {}));
     })(Core = SpaceWars.Core || (SpaceWars.Core = {}));
 })(SpaceWars || (SpaceWars = {}));
-///<reference path="Repository.ts"/>
-///<reference path="../Interfaces/IAsset.ts"/>
-///<reference path="../Vendor/jquery/jquery.d.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Repositories;
-    (function (Repositories) {
-        var ScoreRepo = (function (_super) {
-            __extends(ScoreRepo, _super);
-            function ScoreRepo() {
-                _super.apply(this, arguments);
-            }
-            ScoreRepo.prototype.getAll = function () {
-                var scores = [];
-                $.ajax({
-                    dataType: "json",
-                    url: 'api/scores',
-                    async: false,
-                    success: function (response) {
-                        if (response.error == false) {
-                            response.data.forEach(function (a) {
-                                scores.push(a);
-                            });
-                        }
-                    }
-                });
-                return scores;
-            };
-            ScoreRepo.prototype.save = function (playerId, score) {
-                var result;
-                $.ajax({
-                    dataType: "json",
-                    type: 'POST',
-                    url: 'api/scores',
-                    async: false,
-                    data: { 'id': playerId, 'player_score': score },
-                    success: function (response) {
-                        result = true;
-                    }, failure: function () {
-                        result = false;
-                    }
-                });
-                return result;
-            };
-            ScoreRepo.prototype.getPlayersHighscore = function (playerId) {
-                var highscore;
-                $.ajax({
-                    dataType: "json",
-                    url: 'api/scores/' + playerId,
-                    async: false,
-                    success: function (response) {
-                        if (response.error == false) {
-                            highscore = response.data;
-                        }
-                    }
-                });
-                return highscore;
-            };
-            ScoreRepo.prototype.getTopTen = function () {
-                var scores = [];
-                $.ajax({
-                    dataType: "json",
-                    url: 'api/scores',
-                    async: false,
-                    success: function (response) {
-                        if (response.error == false) {
-                            var counter = 0;
-                            response.data.forEach(function (a) {
-                                if (counter == 10) {
-                                    return;
-                                }
-                                else {
-                                    counter++;
-                                    scores.push(a);
-                                }
-                            });
-                        }
-                    }
-                });
-                return scores;
-            };
-            return ScoreRepo;
-        }(Repositories.Repository));
-        Repositories.ScoreRepo = ScoreRepo;
-    })(Repositories = SpaceWars.Repositories || (SpaceWars.Repositories = {}));
-})(SpaceWars || (SpaceWars = {}));
 ///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../../Repositories/ScoreRepo.ts"/>
 var SpaceWars;
 (function (SpaceWars) {
     var Core;
@@ -376,26 +320,18 @@ var SpaceWars;
                     _super.apply(this, arguments);
                 }
                 Highscores.prototype.init = function (assets) {
-                    this.scoreRepo = new SpaceWars.Repositories.ScoreRepo();
                     this.assets = assets;
                 };
                 Highscores.prototype.create = function () {
-                    var _this = this;
-                    // Resizing world
-                    this.game.world.width = 800;
-                    this.game.world.height = 640;
-                    var heading = this.game.add.text(this.game.world.centerX, 100, 'HIGHSCORES! - press B to return to menu', { font: "16px Arial", fill: "#ffffff", align: "center" });
-                    heading.anchor.set(0.5, 0.5);
-                    var scores = this.scoreRepo.getTopTen();
-                    var marginTop = 120;
-                    scores.forEach(function (s) {
-                        marginTop = marginTop + 20;
-                        var score = _this.game.add.text(_this.game.world.centerX, marginTop, s.name + ' - ' + s.score, { font: "10px Arial", fill: "#ffffff", align: "center" });
-                    });
                     // Creating background
                     this.generateBackground();
+                    var heading = this.game.add.text(this.game.world.centerX, 100, 'HIGHSCORES! - press B to return to menu', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
+                    heading.anchor.set(0.5, 0.5);
+                    var marginTop = 120;
                 };
                 Highscores.prototype.update = function () {
+                    //  Scroll the background
+                    this.background.tilePosition.y -= 0.2;
                     if (this.game.input.keyboard.isDown(Phaser.Keyboard.B)) {
                         this.MainMenu();
                     }
@@ -406,6 +342,8 @@ var SpaceWars;
                 Highscores.prototype.generateBackground = function () {
                     // Set background color
                     this.game.stage.backgroundColor = '#000000';
+                    //  The scrolling starfield background
+                    this.background = this.game.add.tileSprite(0, 40, 2000, 600, 'background_stars');
                 };
                 return Highscores;
             }(Phaser.State));
@@ -425,17 +363,16 @@ var SpaceWars;
                 function LevelUp() {
                     _super.apply(this, arguments);
                 }
-                LevelUp.prototype.init = function (assets, currentLevel, playerState) {
+                LevelUp.prototype.init = function (assets, currentLevel, playerState, score, combo) {
                     this.assets = assets;
                     this.currentLevel = currentLevel;
                     this.playerState = playerState;
+                    this.score = score;
+                    this.combo = combo;
                 };
                 LevelUp.prototype.create = function () {
-                    // Reset World Size
-                    this.game.world.width = 800;
-                    this.game.world.height = 640;
                     // Header
-                    var header = this.game.add.text(400, 100, 'Level Up!, press spacebar to continue', { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    var header = this.game.add.text(400, 100, 'Level Up!, press spacebar to continue', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
                     header.fixedToCamera = true;
                     header.cameraOffset.setTo((this.game.world.centerX) - header.width / 2, 50);
                 };
@@ -448,7 +385,7 @@ var SpaceWars;
                     }
                 };
                 LevelUp.prototype.continue = function () {
-                    this.game.state.start('Arena', true, false, this.assets, this.currentLevel + 1, this.playerState);
+                    this.game.state.start('Arena', true, false, this.assets, this.currentLevel + 1, this.playerState, this.score, this.combo);
                 };
                 LevelUp.prototype.quit = function () {
                     this.game.state.start('MainMenu', true, false);
@@ -459,42 +396,7 @@ var SpaceWars;
         })(States = Core.States || (Core.States = {}));
     })(Core = SpaceWars.Core || (SpaceWars.Core = {}));
 })(SpaceWars || (SpaceWars = {}));
-///<reference path="Repository.ts"/>
-///<reference path="../Vendor/phaser/phaser.d.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Repositories;
-    (function (Repositories) {
-        var UserRepo = (function (_super) {
-            __extends(UserRepo, _super);
-            function UserRepo() {
-                _super.apply(this, arguments);
-            }
-            UserRepo.prototype.create = function (username, password) {
-                var result;
-                $.ajax({
-                    dataType: "json",
-                    type: 'POST',
-                    url: 'users',
-                    async: false,
-                    data: { 'username': username, 'password': password },
-                    success: function (response) {
-                        result = true;
-                    }, failure: function () {
-                        result = false;
-                    }
-                });
-                return result;
-            };
-            return UserRepo;
-        }(Repositories.Repository));
-        Repositories.UserRepo = UserRepo;
-    })(Repositories = SpaceWars.Repositories || (SpaceWars.Repositories = {}));
-})(SpaceWars || (SpaceWars = {}));
 ///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../../Repositories/ScoreRepo.ts"/>
-///<reference path="../../Repositories/UserRepo.ts"/>
-///<reference path="../../Services/AuthService.ts"/>
 ///<reference path="../../Vendor/jquery/jquery.d.ts"/>
 var SpaceWars;
 (function (SpaceWars) {
@@ -510,53 +412,25 @@ var SpaceWars;
                 }
                 GameOver.prototype.init = function (assets, score) {
                     this.assets = assets;
-                    this.scoreRepo = new SpaceWars.Repositories.ScoreRepo();
-                    this.userRepo = new SpaceWars.Repositories.UserRepo();
                     this.authService = new SpaceWars.Services.AuthService();
                     this.score = score;
                 };
                 GameOver.prototype.create = function () {
-                    // Resizing world
-                    this.game.world.width = 800;
-                    this.game.world.height = 640;
                     // generating background
                     this.generateBackground();
                     // Heading
-                    var heading = this.game.add.text(this.game.world.centerX, 100, 'Game Over!', { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    var heading = this.game.add.text(this.game.world.centerX, 100, 'Game Over!', { font: "16px press_start_2pregular", fill: "#ffffff", align: "center" });
                     heading.anchor.set(0.5, 0.5);
                     // Game Debreif info
-                    var displayScore = this.game.add.text(this.game.world.centerX, 130, 'You Scored: ' + this.score, { font: "12px Arial", fill: "#ffffff", align: "center" });
+                    var displayScore = this.game.add.text(this.game.world.centerX, 130, 'You Scored: ' + this.score, { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                     displayScore.anchor.set(0.5, 0.5);
                     // Instructions
-                    var controlInstructions = this.game.add.text(this.game.world.centerX, 170, 'Press Space to restart, or Q to exit to menu', { font: "12px Arial", fill: "#ffffff", align: "center" });
+                    var controlInstructions = this.game.add.text(this.game.world.centerX, 170, 'Press Space to restart, or Q to exit to menu', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
                     controlInstructions.anchor.set(0.5, 0.5);
-                    var userId = this.isLoggedIn();
-                    // IF Logged in, save score!!
-                    if (userId >= 1) {
-                        var oldScore = this.scoreRepo.getPlayersHighscore(userId);
-                        if (oldScore) {
-                            var displayOldScore = this.game.add.text(this.game.world.centerX, 150, 'Previous Highscore: ' + oldScore, { font: "16px Arial", fill: "#ffffff", align: "center" });
-                            displayOldScore.anchor.set(0.5, 0.5);
-                        }
-                        // Saving Score
-                        this.scoreRepo.save(userId, this.score);
-                    }
-                    else {
-                        // Instructions
-                        var notLoggedInMessage = this.game.add.text(this.game.world.centerX, 200, "Can't Save Score, You must be logged in!", { font: "12px Arial", fill: "#ffffff", align: "center" });
-                        notLoggedInMessage.anchor.set(0.5, 0.5);
-                        var loginButton = this.game.add.text(this.game.world.centerX, 230, "Log-in", { font: "12px Arial", fill: "#ffffff", align: "center" });
-                        loginButton.anchor.set(0.5, 0.5);
-                        loginButton.inputEnabled = true;
-                        loginButton.events.onInputDown.add(this.redirectToLoginPage, this);
-                    }
-                };
-                GameOver.prototype.redirectToLoginPage = function () {
-                    // Storing Score in Session to save later
-                    // Linking to WWW/login page
-                    window.location.href = "login";
                 };
                 GameOver.prototype.update = function () {
+                    //  Scroll the background
+                    this.background.tilePosition.y -= 0.2;
                     if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
                         this.removePopUp();
                         this.newGame();
@@ -575,46 +449,215 @@ var SpaceWars;
                 GameOver.prototype.generateBackground = function () {
                     // Set background color
                     this.game.stage.backgroundColor = '#000000';
-                };
-                GameOver.prototype.isLoggedIn = function () {
-                    return this.authService.isLoggedIn();
+                    //  The scrolling starfield background
+                    this.background = this.game.add.tileSprite(0, 40, 2000, 600, 'background_stars');
                 };
                 GameOver.prototype.removePopUp = function () {
                     $('#' + this.popUpElementId).remove();
-                };
-                GameOver.prototype.createUser = function () {
-                    // Getting Values from fields
-                    var userName = $("#create_form").find("input[name='username']").val();
-                    var password = $("#create_form").find("input[name='password']").val();
-                    // Validate Matching passwords
-                    //TODO
-                    // Check Username available
-                    // todo
-                    // if all is okay
-                    // Sending Request via userRepo
-                    this.userRepo.create(userName, password);
-                    this.removePopUp();
-                    // Show Success Message / or sumthin
-                    // Else catch!
-                    // TODO: Display error message
-                };
-                GameOver.prototype.logUserIn = function () {
-                    var userName = $("#login_form").find("input[name='username']").val();
-                    var password = $("#login_form").find("input[name='password']").val();
-                    // if returns userId then user is logged in!
-                    var userId = this.authService.login(userName, password);
-                    if (userId !== 0) {
-                        // saving score
-                        this.scoreRepo.save(userId, this.score);
-                        // Removing popup
-                        this.removePopUp();
-                    }
                 };
                 return GameOver;
             }(Phaser.State));
             States.GameOver = GameOver;
         })(States = Core.States || (Core.States = {}));
     })(Core = SpaceWars.Core || (SpaceWars.Core = {}));
+})(SpaceWars || (SpaceWars = {}));
+///<reference path="../../Vendor/phaser/phaser.d.ts"/>
+///<reference path="../Abstract/Spaceship.ts"/>
+var SpaceWars;
+(function (SpaceWars) {
+    var Models;
+    (function (Models) {
+        var Concrete;
+        (function (Concrete) {
+            var Bullet = (function (_super) {
+                __extends(Bullet, _super);
+                function Bullet(game, x, y, key) {
+                    _super.call(this, game, x, y, key, null);
+                }
+                Bullet.prototype.getOwner = function () {
+                    if (this._owner != null) {
+                        return this._owner;
+                    }
+                    else {
+                        throw new Error('Owner of bullet not set');
+                    }
+                };
+                // Returns the exact impact damage.
+                Bullet.prototype.getDamage = function () {
+                    // Todo: Implement Critical Strikes
+                    try {
+                        // Impact Range
+                        var minImpact = this._damage * 0.9;
+                        var maxImpact = this._damage * 1.1;
+                        return this.game.rnd.integerInRange(minImpact, maxImpact);
+                    }
+                    catch (e) {
+                        throw new Error(e);
+                    }
+                };
+                return Bullet;
+            }(Phaser.Sprite));
+            Concrete.Bullet = Bullet;
+        })(Concrete = Models.Concrete || (Models.Concrete = {}));
+    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
+})(SpaceWars || (SpaceWars = {}));
+///<reference path="../../Vendor/phaser/phaser.d.ts"/>
+///<reference path="../../Core/States/Arena.ts"/>
+///<reference path="../Concrete/Bullet.ts"/>
+var SpaceWars;
+(function (SpaceWars) {
+    var Models;
+    (function (Models) {
+        var Abstract;
+        (function (Abstract) {
+            /* This is the 'Abstract' SpaceShip class
+             *
+             * It is essentially a sprite with extended functionality like Shoot
+             */
+            var Spaceship = (function (_super) {
+                __extends(Spaceship, _super);
+                function Spaceship(game, x, y, key, speed, damage, fireRate, bulletSpeed, oppositeDirection) {
+                    if (oppositeDirection === void 0) { oppositeDirection = false; }
+                    //# Setting Sprite Properties
+                    _super.call(this, game, x, y, key);
+                    // Variable to hold timestamp for next allowed shot
+                    this._nextFire = 0;
+                    // Setting Anchor point (Middle)
+                    this.anchor.setTo(0.5, 0.5);
+                    // Removing Smoothing Effect on sprite
+                    this.smoothed = false;
+                    //# Enabling Physics on the Sprite
+                    this.game.physics.arcade.enable(this);
+                    //# Setting Spaceship Specific Fields
+                    this._speed = speed;
+                    this._damage = damage;
+                    this._fireRate = fireRate;
+                    this._bulletSpeed = bulletSpeed;
+                    this._oppositeDirection = oppositeDirection;
+                    // Adding idle animation
+                    this.animations.add('idle', [2, 1, 0], 7, true);
+                    // Advancing Animation
+                    this.animations.add('advancing', [4, 3], 10, true);
+                    if (this._oppositeDirection) {
+                        //# Adjusting to Opposite Direction
+                        // flipping enemies to face the player
+                        this.scale.x = -1;
+                        // Flip bullet direction
+                        this._bulletSpeed = this._bulletSpeed - (this._bulletSpeed + this._bulletSpeed);
+                    }
+                }
+                Spaceship.prototype.update = function () {
+                    this.play('idle');
+                };
+                /* Methods */
+                Spaceship.prototype.shoot = function () {
+                    var bullets;
+                    // Grab bullets group array reference from active state
+                    try {
+                        var currentState = this.game.state.getCurrentState();
+                        bullets = currentState.bullets;
+                    }
+                    catch (e) {
+                        throw new Error('Could not get bullets from current state ' + e);
+                    }
+                    // Fire a shot if the weapon is ready.
+                    if (this.game.time.now > this._nextFire && currentState.bullets.countDead() > 0) {
+                        // Setting point in future time for next allowed shot.
+                        this._nextFire = this.game.time.now + this._fireRate;
+                        // Grab a bullet from the generated list
+                        var bullet = currentState.bullets.getFirstDead();
+                        // Setting Damage on bullet
+                        bullet._damage = this._damage;
+                        // Setting owner of bullet
+                        bullet._owner = this;
+                        // Set bullet position
+                        bullet.reset((this.body.x + (this.body.width / 2)), (this.body.y + (this.height) / 2));
+                        // Set bullet direction and speed
+                        bullet.body.velocity.x = this._bulletSpeed;
+                    }
+                };
+                return Spaceship;
+            }(Phaser.Sprite));
+            Abstract.Spaceship = Spaceship;
+        })(Abstract = Models.Abstract || (Models.Abstract = {}));
+    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
+})(SpaceWars || (SpaceWars = {}));
+///<reference path="../../Vendor/phaser/phaser.d.ts"/>
+///<reference path="../Abstract/Spaceship.ts"/>
+///<reference path="../../Core/States/Arena.ts"/>
+///<reference path="Bullet.ts"/>
+var SpaceWars;
+(function (SpaceWars) {
+    var Models;
+    (function (Models) {
+        var Concrete;
+        (function (Concrete) {
+            /*
+            * This is the player class.
+            *
+            *
+            */
+            var Player = (function (_super) {
+                __extends(Player, _super);
+                function Player(game, x, y, key) {
+                    // Calling sprite's constructor
+                    _super.call(this, game, x, y, key, 100, 10, 300, 1000);
+                    var shootKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+                    shootKey.onDown.add(this.shoot, this);
+                }
+                Player.prototype.update = function () {
+                    // Player Controls
+                    this.body.velocity.x = 0;
+                    this.body.velocity.y = 0;
+                    // basic movements
+                    if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+                        this.body.velocity.y = -250;
+                    }
+                    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+                        this.body.velocity.y = 250;
+                    }
+                    if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+                        this.body.velocity.x = -450;
+                    }
+                    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+                        this.body.velocity.x = 450;
+                        this.play('advancing');
+                    }
+                    else {
+                        this.play('idle');
+                    }
+                };
+                return Player;
+            }(Models.Abstract.Spaceship));
+            Concrete.Player = Player;
+        })(Concrete = Models.Concrete || (Models.Concrete = {}));
+    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
+})(SpaceWars || (SpaceWars = {}));
+///<reference path="../../Vendor/phaser/phaser.d.ts"/>
+///<reference path="../../Core/States/Arena.ts"/>
+///<reference path="../Abstract/Spaceship.ts"/>
+var SpaceWars;
+(function (SpaceWars) {
+    var Models;
+    (function (Models) {
+        var Concrete;
+        (function (Concrete) {
+            var Enemy = (function (_super) {
+                __extends(Enemy, _super);
+                function Enemy(game, x, y, key) {
+                    // TODO: Find another place to set enemy stats.
+                    _super.call(this, game, x, y, key, 100, 10, 500, 500, true);
+                }
+                Enemy.prototype.update = function () {
+                    // Idle animation
+                    this.play('idle');
+                    // TODO: Place AI logic here
+                };
+                return Enemy;
+            }(Models.Abstract.Spaceship));
+            Concrete.Enemy = Enemy;
+        })(Concrete = Models.Concrete || (Models.Concrete = {}));
+    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
 })(SpaceWars || (SpaceWars = {}));
 ///<reference path="../../Vendor/phaser/phaser.d.ts"/>
 var SpaceWars;
@@ -632,403 +675,30 @@ var SpaceWars;
         })(Concrete = Models.Concrete || (Models.Concrete = {}));
     })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
 })(SpaceWars || (SpaceWars = {}));
-var SpaceWars;
-(function (SpaceWars) {
-    var Core;
-    (function (Core) {
-        var Helpers;
-        (function (Helpers) {
-            /*
-            
-             This is a simple logger class, it's sole purpose is
-             to log custom information to various log types.
-            
-             */
-            var Shout = (function () {
-                function Shout() {
-                }
-                /*
-        
-                 ToConsole writes information to the Console.
-        
-                 */
-                Shout.ToConsole = function (message, className) {
-                    var output = Array();
-                    var seperator = ' : ';
-                    // Appending timestamp if specified in param.
-                    output.push(new Date().toLocaleTimeString());
-                    // Appending Custom Message
-                    output.push(message);
-                    // Appending Class name if provided
-                    if (className !== null)
-                        output.push(className);
-                    // Outputting to console.
-                    console.log(output.join(seperator));
-                };
-                return Shout;
-            }());
-            Helpers.Shout = Shout;
-        })(Helpers = Core.Helpers || (Core.Helpers = {}));
-    })(Core = SpaceWars.Core || (SpaceWars.Core = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../Models/Abstract/Entity.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Data;
-    (function (Data) {
-        var Connection = (function () {
-            function Connection() {
-            }
-            Connection.getDBContext = function () {
-                var db = {
-                    // Tables
-                    spaceships: [
-                        {
-                            'id': 1,
-                            'name': 'test spaceship',
-                            'key': 'spaceship'
-                        },
-                        {
-                            'id': 2,
-                            'name': 'test spaceship 2',
-                            'key': 'spaceship2'
-                        }
-                    ],
-                    modules: [
-                        {
-                            'id': 1,
-                            'name': 'laser gun',
-                            'type': 'weapon',
-                            'key': 'lasergun'
-                        },
-                        {
-                            'id': 2,
-                            'name': 'turbo thrusters',
-                            'type': 'thruster',
-                            'key': 'thrusters'
-                        }
-                    ],
-                    users: [
-                        {
-                            'id': 1,
-                            'name': 'ABC',
-                            'spaceships': '1',
-                            'modules': '1, 2',
-                            'activeSpaceship': 1,
-                            'activeModules': '1' // Varchar
-                        }
-                    ],
-                    scores: [] // TODO: implement
-                };
-                return db;
-            };
-            return Connection;
-        }());
-        Data.Connection = Connection;
-    })(Data = SpaceWars.Data || (SpaceWars.Data = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../../Data/Connection.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Abstract;
-        (function (Abstract) {
-            var Entity = (function (_super) {
-                __extends(Entity, _super);
-                function Entity() {
-                    _super.apply(this, arguments);
-                }
-                return Entity;
-            }(Phaser.Sprite));
-            Abstract.Entity = Entity;
-        })(Abstract = Models.Abstract || (Models.Abstract = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../../Core/Helpers/Shout.ts"/>
-///<reference path="Entity.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Abstract;
-        (function (Abstract) {
-            /*
-            *   This is the Base class for all modules; Guns, Bullets, Thrusters aso.
-            *   This class needs to provide a unified way to extract data about a module from a
-            *   data connection object upon instantiation.
-            */
-            var Module = (function (_super) {
-                __extends(Module, _super);
-                function Module() {
-                    _super.apply(this, arguments);
-                }
-                return Module;
-            }(Phaser.Sprite));
-            Abstract.Module = Module;
-        })(Abstract = Models.Abstract || (Models.Abstract = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../Abstract/Module.ts"/>
-///<reference path="Entity.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Abstract;
-        (function (Abstract) {
-            var Vehicle = (function (_super) {
-                __extends(Vehicle, _super);
-                function Vehicle() {
-                    _super.apply(this, arguments);
-                }
-                return Vehicle;
-            }(Abstract.Entity));
-            Abstract.Vehicle = Vehicle;
-        })(Abstract = Models.Abstract || (Models.Abstract = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
-})(SpaceWars || (SpaceWars = {}));
 ///<reference path="../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../../Interfaces/IWeapon.ts"/>
-///<reference path="Module.ts"/>
+///<reference path="../Models/Concrete/Enemy.ts"/>
 var SpaceWars;
 (function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Abstract;
-        (function (Abstract) {
-            var Weapon = (function (_super) {
-                __extends(Weapon, _super);
-                function Weapon(game, x, y, key) {
-                    _super.call(this, game, x, y, key);
-                    // Variable to hold timestamp for next allowed shot
-                    this.nextFire = 0;
-                    // The rate of which bullets can be fired, (Higher is slower)
-                    this.fireRate = 500;
-                    // The velocity of the bullets
-                    this.speed = 500;
-                    // Bullets
-                    this.bullets = this.game.add.group();
-                    this.bullets.enableBody = true;
-                    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-                    this.bullets.createMultiple(150, 'bullet');
-                    this.bullets.setAll('checkWorldBounds', true);
-                    this.bullets.setAll('outOfBoundsKill', true);
-                }
-                // Fires a shot
-                Weapon.prototype.shoot = function () {
-                    if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
-                        this.nextFire = this.game.time.now + this.fireRate;
-                        var bullet = this.bullets.getFirstDead();
-                        bullet.reset((this.body.x + this.body.width), this.body.y);
-                        bullet.body.velocity.x = this.speed;
-                    }
-                };
-                return Weapon;
-            }(Abstract.Module));
-            Abstract.Weapon = Weapon;
-        })(Abstract = Models.Abstract || (Models.Abstract = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../Abstract/Vehicle.ts"/>
-///<reference path="../Abstract/Weapon.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Abstract;
-        (function (Abstract) {
-            var Spaceship = (function (_super) {
-                __extends(Spaceship, _super);
-                function Spaceship() {
-                    _super.apply(this, arguments);
-                }
-                return Spaceship;
-            }(Abstract.Vehicle));
-            Abstract.Spaceship = Spaceship;
-        })(Abstract = Models.Abstract || (Models.Abstract = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="User.ts"/>
-///<reference path="../Abstract/Spaceship.ts"/>
-///<reference path="../Abstract/Module.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Concrete;
-        (function (Concrete) {
-            /*
-            * This is the player object.
-            *
-            *
-            */
-            var Player = (function (_super) {
-                __extends(Player, _super);
-                function Player(game, x, y, key) {
-                    // Calling sprite's constructor
-                    _super.call(this, game, x, y, key);
-                    // Variable to hold timestamp for next allowed shot
-                    this.nextFire = 0;
-                    // The rate of which bullets can be fired, (Higher is slower)
-                    this.fireRate = 200;
-                    // The velocity of the bullets
-                    this.speed = 1000;
-                    // Setting anchor point
-                    this.anchor.setTo(0.5, 0.5);
-                    this.smoothed = false;
-                    this.animations.add('idle', [2, 1, 0], 7, true);
-                    this.animations.add('advancing', [4, 3], 10, true);
-                    // Adding some bullets
-                    // Bullets
-                    this.bullets = this.game.add.group();
-                    this.bullets.enableBody = true;
-                    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-                    this.game.physics.arcade.enable(this);
-                    // Creating some bullets
-                    for (var i = 0, bullet; i < 50; i++) {
-                        //adding bullet to the game
-                        bullet = this.game.add.sprite(0, 0, 'yellow_bullet', null, this.bullets);
-                        // Enabling physics engine on bullet
-                        bullet.enableBody = true;
-                        bullet.physicsBodyType = Phaser.Physics.ARCADE;
-                        // Setting pivot / scale point to be in center of bullet sprite
-                        bullet.anchor.set(0.5);
-                        bullet.smoothed = false;
-                        //scaling down bullet size
-                        bullet.scale.x = 0.5;
-                        bullet.scale.y = 0.5;
-                        bullet.kill();
-                    }
-                    this.bullets.setAll('checkWorldBounds', true);
-                    this.bullets.setAll('outOfBoundsKill', true);
-                    // Setting base damage
-                    this.maxDmg = 8;
-                    this.minDmg = 6;
-                }
-                Player.prototype.update = function () {
-                    // Player Controls
-                    this.body.velocity.x = 0;
-                    this.body.velocity.y = 0;
-                    this.play('idle');
-                    // basic movements
-                    if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-                        this.body.velocity.y = -250;
-                    }
-                    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-                        this.body.velocity.y = 250;
-                    }
-                    if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-                        this.body.velocity.x = -450;
-                    }
-                    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-                        this.body.velocity.x = 450;
-                        this.play('advancing');
-                    }
-                    if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-                        this.shoot();
-                    }
-                };
-                // Fires a shot
-                Player.prototype.shoot = function () {
-                    if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
-                        this.nextFire = this.game.time.now + this.fireRate;
-                        var bullet = this.bullets.getFirstDead();
-                        bullet.reset((this.body.x + (this.body.width / 2)), (this.body.y + (this.height) / 2));
-                        bullet.body.velocity.x = this.speed;
-                    }
-                };
-                Player.prototype.equip = function () {
-                };
-                return Player;
-            }(Models.Abstract.Spaceship));
-            Concrete.Player = Player;
-        })(Concrete = Models.Concrete || (Models.Concrete = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
-})(SpaceWars || (SpaceWars = {}));
-///<reference path="../../Vendor/phaser/phaser.d.ts"/>
-///<reference path="../Abstract/Spaceship.ts"/>
-var SpaceWars;
-(function (SpaceWars) {
-    var Models;
-    (function (Models) {
-        var Concrete;
-        (function (Concrete) {
-            var Enemy = (function (_super) {
-                __extends(Enemy, _super);
-                function Enemy(game, x, y, key) {
-                    _super.call(this, game, x, y, key);
-                    // Variable to hold timestamp for next allowed shot
-                    this.nextFire = 0;
-                    // The rate of which bullets can be fired, (Higher is slower)
-                    this.fireRate = 500;
-                    // The velocity of the bullets
-                    this.speed = 500;
-                    // Adding idle animation
-                    this.animations.add('idle', [2, 1, 0], 7, true);
-                    // Adding some bullets
-                    // Bullets
-                    this.bullets = this.game.add.group();
-                    this.bullets.enableBody = true;
-                    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-                    // Creating some bullets
-                    for (var i = 0, bullet; i < 10; i++) {
-                        //adding bullet to the game
-                        bullet = this.game.add.sprite(0, 0, 'yellow_bullet', null, this.bullets);
-                        // Enabling physics engine on bullet
-                        bullet.enableBody = true;
-                        bullet.physicsBodyType = Phaser.Physics.ARCADE;
-                        // Setting pivot / scale point to be in center of bullet sprite
-                        bullet.anchor.set(0.5);
-                        bullet.smoothed = false;
-                        //scaling down bullet size
-                        bullet.scale.x = -0.5;
-                        bullet.scale.y = 0.5;
-                        bullet.kill();
-                    }
-                    this.bullets.setAll('checkWorldBounds', true);
-                    this.bullets.setAll('outOfBoundsKill', true);
-                    // flipping enemies to face the player
-                    this.scale.x = -1;
-                    // Setting start dmg
-                    this.dmg = 1;
-                }
-                Enemy.prototype.update = function () {
-                    this.play('idle');
-                    // if player is same y as this.. then shoot
-                };
-                Enemy.prototype.evade = function () {
-                };
-                Enemy.prototype.shoot = function () {
-                    if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0) {
-                        this.nextFire = this.game.time.now + this.fireRate;
-                        var bullet = this.bullets.getFirstDead();
-                        bullet.reset((this.body.x + (this.body.width / 2)), (this.body.y + (this.height) / 2));
-                        bullet.body.velocity.x = this.speed - (this.speed + this.speed);
-                    }
-                };
-                Enemy.prototype.dropModules = function () {
-                    //console.log('module dropped');
-                    //this.game.add.sprite(100, 100, 'lasergun');
-                };
-                return Enemy;
-            }(Models.Abstract.Spaceship));
-            Concrete.Enemy = Enemy;
-        })(Concrete = Models.Concrete || (Models.Concrete = {}));
-    })(Models = SpaceWars.Models || (SpaceWars.Models = {}));
+    var Collections;
+    (function (Collections) {
+        var EnemyGroup = (function (_super) {
+            __extends(EnemyGroup, _super);
+            function EnemyGroup() {
+                _super.apply(this, arguments);
+            }
+            return EnemyGroup;
+        }(Phaser.Group));
+        Collections.EnemyGroup = EnemyGroup;
+    })(Collections = SpaceWars.Collections || (SpaceWars.Collections = {}));
 })(SpaceWars || (SpaceWars = {}));
 ///<reference path="../../Vendor/phaser/phaser.d.ts"/>
 ///<reference path="../../Models/Concrete/Player.ts"/>
 ///<reference path="../../Models/Concrete/Enemy.ts"/>
+///<reference path="../../Models/Concrete/Bullet.ts"/>
 ///<reference path="../../Models/Abstract/Asset.ts"/>
 ///<reference path="../../Models/Concrete/User.ts"/>
 ///<reference path="../../Models/Abstract/Spaceship.ts"/>
+///<reference path="../../Collections/EnemyGroup.ts"/>
 var SpaceWars;
 (function (SpaceWars) {
     var Core;
@@ -1048,13 +718,16 @@ var SpaceWars;
                 /* This is the Initial Method which is run,
                 *  when the state starts
                 */
-                Arena.prototype.init = function (assets, level, playerState, score) {
+                Arena.prototype.init = function (assets, level, playerState, score, combo) {
                     if (level === void 0) { level = 1; }
                     if (score === void 0) { score = 0; }
+                    if (combo === void 0) { combo = 0; }
                     // Grabbing Information from Former level (if any)
                     this.level = level;
                     this.assets = assets;
                     this.score = score;
+                    this.playerState = playerState;
+                    this.combo = combo;
                     // Settings for the Game should be set here
                     this.totalEnemies = 20;
                 };
@@ -1067,6 +740,13 @@ var SpaceWars;
                     this.createMap();
                     // Get Terrain Assets
                     this.getTerrainPropsList();
+                    // Get Bullets Ready
+                    // Populating Bullets
+                    this.bullets = this.game.add.group();
+                    this.bullets.addMultiple(this.generateBullets());
+                    // Removing the Sprite from Rendering and Physics when it's out of bounds.
+                    this.bullets.setAll('checkWorldBounds', true);
+                    this.bullets.setAll('outOfBoundsKill', true);
                     // Spawning the Player
                     this.spawnPlayer();
                     // Spawning Enemies
@@ -1076,6 +756,13 @@ var SpaceWars;
                     this.game.time.events.repeat(Phaser.Timer.SECOND * 2, this.totalEnemies, this.spawnEnemy, this);
                     // Loading UI
                     this.loadUI();
+                    var classContext = this;
+                    // Adding callback from removing help text at the start of the game.
+                    this.game.input.keyboard.onDownCallback = function () {
+                        if (classContext.UIControlHelp.visible) {
+                            classContext.UIControlHelp.visible = false;
+                        }
+                    };
                 };
                 Arena.prototype.update = function () {
                     //  Scroll the background
@@ -1086,10 +773,10 @@ var SpaceWars;
                     }
                     //#### Collisions #### //
                     //Hitting enemies with bullets
-                    this.game.physics.arcade.overlap(this.player.bullets, this.enemies, this.enemyHit, null, this);
+                    this.game.physics.arcade.overlap(this.bullets, this.enemies, this.enemyHit, null, this);
                     //Player hit by enemies
                     this.enemies.forEachExists(function (enemy) {
-                        this.game.physics.arcade.overlap(enemy.bullets, this.player, this.playerHit, null, this);
+                        this.game.physics.arcade.overlap(this.bullets, this.player, this.playerHit, null, this);
                     }, this);
                     //#### AI #### //
                     // try to get player in sight
@@ -1114,7 +801,7 @@ var SpaceWars;
                         if (enemy.x + enemy.width < 0) {
                             // Resetting position
                             enemy.body.x = this.game.world.width + enemy.body.width;
-                            enemy.body.y = this.game.world.centerY;
+                            enemy.body.y = this.game.rnd.integerInRange(this.game.world.y, this.game.world.height);
                             enemy.body.velocity.x = -200;
                         }
                     }, this);
@@ -1122,8 +809,8 @@ var SpaceWars;
                 };
                 Arena.prototype.createMap = function () {
                     // Setting Stage Settings
-                    this.game.stage.width = 800;
-                    this.game.stage.height = 640;
+                    this.game.stage.width = 948;
+                    this.game.stage.height = 600;
                     // Set background color
                     this.game.stage.backgroundColor = '#000000';
                     //  The scrolling starfield background
@@ -1149,10 +836,9 @@ var SpaceWars;
                         var terrainIndex = this.game.rnd.integerInRange(0, (this.terrainAssets.length - 1));
                         // Adding the Prop
                         var prop = this.game.add.sprite(100, 100, this.terrainAssets[terrainIndex].asset_key, null, this.terrainProps);
-                        // Enabling physics engine on bullet
-                        prop.enableBody = true;
-                        prop.physicsBodyType = Phaser.Physics.ARCADE;
-                        prop.smoothed = false;
+                        //prop.enableBody = true;
+                        //prop.physicsBodyType = Phaser.Physics.ARCADE;
+                        //prop.smoothed = false;
                         // killing the prop
                         prop.kill();
                     }
@@ -1166,29 +852,56 @@ var SpaceWars;
                     // Setting Movement Speed on prop 
                     prop.body.velocity.x = -200;
                     // When is next spawn
-                    this.nextPropSpawn = this.game.time.now + this.game.rnd.integerInRange(500, 5000);
+                    this.nextPropSpawn = this.game.time.now + this.game.rnd.integerInRange(500, 2000);
                 };
                 // #### User Interface ####
                 Arena.prototype.loadUI = function () {
                     // Player Health
-                    this.UIHealth = this.game.add.text(0, 0, '', { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    this.UIHealth = this.game.add.text(0, 0, '', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
                     this.UIHealth.fixedToCamera = true;
-                    this.UIHealth.cameraOffset.setTo(50, 50);
+                    this.UIHealth.cameraOffset.setTo(10, 10);
+                    // Health bar
+                    this.UIHealthBar = this.game.add.graphics(0, 0);
+                    var color = 0xFF3300;
+                    this.UIHealthBar.lineStyle(15, color, 1);
+                    this.UIHealthBar.moveTo(10, 40);
+                    this.UIHealthBar.lineTo(200, 40);
+                    // Current Combo
+                    this.UICombo = this.game.add.text(0, 0, '', { font: "14px press_start_2pregular", fill: "#ffffff", align: "center" });
+                    this.UICombo.fixedToCamera = true;
+                    this.UICombo.cameraOffset.setTo(this.game.world.centerX, 10);
+                    this.UICombo.anchor.x = 0.5;
                     // Current Score
-                    this.UIScore = this.game.add.text(0, 0, '', { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    this.UIScore = this.game.add.text(0, 0, '', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
                     this.UIScore.fixedToCamera = true;
-                    this.UIScore.cameraOffset.setTo(50, 70);
+                    this.UIScore.cameraOffset.setTo(this.game.world.centerX, 40);
+                    this.UIScore.anchor.x = 0.5;
                     // Current Level
-                    this.UILevel = this.game.add.text(0, 0, '', { font: "16px Arial", fill: "#ffffff", align: "center" });
+                    this.UILevel = this.game.add.text(0, 0, '', { font: "10px press_start_2pregular", fill: "#ffffff", align: "center" });
                     this.UILevel.fixedToCamera = true;
-                    this.UILevel.cameraOffset.setTo(50, 90);
+                    this.UILevel.cameraOffset.setTo(10, ((this.game.world.height - this.UILevel.height) - 10));
+                    // ControlHelp
+                    this.UIControlHelp = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Controls: Move with Arrow keys, Shoot with Space', { font: "12px press_start_2pregular", fill: "#ffffff", align: "center" });
+                    this.UIControlHelp.anchor.x = 0.5;
                     // Updating Data
                     this.updateUI();
                 };
                 Arena.prototype.updateUI = function () {
                     this.UIScore.setText('Score: ' + this.score.toString());
                     this.UIHealth.setText('Health: ' + this.player.health.toString());
+                    // Update Healthbar aswell
+                    // removing old healthbar
+                    this.UIHealthBar.clear();
+                    // Calculating color
+                    var x = (this.player.health / this.player._maxHealth) * 100;
+                    var color = this.convertToHex((x > 50 ? 1 - 2 * (x - 50) / 100.0 : 1.0) * 255, (x > 50 ? 1.0 : 2 * x / 100.0) * 255, 0);
+                    // Redrawing health bar 
+                    this.UIHealthBar.lineStyle(15, color, 1);
+                    this.UIHealthBar.moveTo(10, 40);
+                    var value = ((this.player.health / this.player._maxHealth) * 100) * 2;
+                    this.UIHealthBar.lineTo(value, 40);
                     this.UILevel.setText('Level: ' + this.level.toString());
+                    this.UICombo.setText('Combo x' + this.combo.toString());
                 };
                 Arena.prototype.generateEnemies = function () {
                     // Create Group Holding Enemies
@@ -1213,6 +926,9 @@ var SpaceWars;
                         enemy.exists = false;
                         // Setting health
                         enemy.health = 15 * this.level;
+                        enemy._maxHealth = enemy.health;
+                        // Setting damage 
+                        enemy._damage = 10 * (this.level);
                         // Adding the enemy to group
                         this.enemies.add(enemy);
                     }
@@ -1224,7 +940,6 @@ var SpaceWars;
                         var enemy;
                         // Find an enemy which is not in the game, but is still alive
                         for (var i = 0; i < this.enemies.children.length; i++) {
-                            // TODO: Make array Typed by Enemy<>
                             if (this.enemies.children[i].alive === true && this.enemies.children[i].exists === false) {
                                 // Grab Enemy
                                 enemy = this.enemies.children[i];
@@ -1237,13 +952,35 @@ var SpaceWars;
                             enemy.exists = true;
                             // Resetting position
                             enemy.body.x = this.game.world.width + enemy.body.width;
-                            enemy.body.y = this.game.world.centerY;
+                            enemy.body.y = this.game.rnd.integerInRange(this.game.world.y, this.game.world.height);
                             // Setting Movement Speed on prop 
                             enemy.body.velocity.x = -200;
                             // When is next spawn
                             this.nextEnemySpawn = this.game.time.now + this.game.rnd.integerInRange(500, 3000);
                         }
                     }
+                };
+                // Generating a Collection of Bullets
+                Arena.prototype.generateBullets = function () {
+                    var bullets = new Array();
+                    // Creating some bullets
+                    for (var i = 0, bullet; i < 50; i++) {
+                        //adding bullet to the game
+                        bullet = new SpaceWars.Models.Concrete.Bullet(this.game, 0, 0, 'yellow_bullet');
+                        // Adding Bullet to the Game
+                        bullet = this.game.add.existing(bullet);
+                        // Enabling physics on bullet
+                        this.game.physics.arcade.enable(bullet);
+                        // Setting pivot / scale point to be in center of bullet sprite
+                        bullet.anchor.set(0.5);
+                        bullet.smoothed = false;
+                        //scaling down bullet size
+                        bullet.scale.x = 0.5;
+                        bullet.scale.y = 0.5;
+                        bullet.kill();
+                        bullets.push(bullet);
+                    }
+                    return bullets;
                 };
                 Arena.prototype.spawnPlayer = function () {
                     // Initializing the Player
@@ -1253,7 +990,8 @@ var SpaceWars;
                         this.player.health = this.playerState.health;
                     }
                     else {
-                        this.player.health = 3;
+                        this.player.health = 100;
+                        this.player._maxHealth = this.player.health;
                     }
                     // keeping the player inside map bounds
                     this.player.body.collideWorldBounds = true;
@@ -1269,40 +1007,49 @@ var SpaceWars;
                 };
                 // #### Collision Handlers #### //
                 Arena.prototype.enemyHit = function (bullet, enemy) {
-                    bullet.kill();
-                    var damage = this.game.rnd.integerInRange(this.player.minDmg, this.player.maxDmg);
-                    enemy.health -= damage;
-                    // Add sprite with number of damage dealt
-                    var dmgShow = this.game.add.text(enemy.body.x - (enemy.body.width / 2), enemy.body.y - 20, damage.toString(), { font: "16px Arial", fill: "#ffffff" });
-                    dmgShow.anchor.x = 0.5;
-                    dmgShow.anchor.y = 0.5;
-                    // Tween the sprite
-                    var tween = this.game.add.tween(dmgShow).to({ alpha: 0, y: dmgShow.y - 20 }, 1000, Phaser.Easing.Linear.None, true, 0);
-                    tween.onComplete.add(function () {
-                        // Destroying the sprite
-                        dmgShow.destroy();
-                    });
-                    if (enemy.health < 1) {
-                        // Kill the enemy
-                        enemy.kill();
-                        this.explode(enemy);
-                        // Update score
-                        this.score += (2 * this.level);
-                        this.updateUI();
-                        // If No more enemies is alive
-                        if (this.enemies.countLiving() <= 0) {
-                            // Advance to next level.
-                            this.nextLevel();
+                    if (bullet.getOwner() !== enemy) {
+                        bullet.kill();
+                        var damage = bullet.getDamage();
+                        enemy.health -= damage;
+                        // Add sprite with number of damage dealt
+                        var dmgShow = this.game.add.text(enemy.body.x - (enemy.body.width / 2), enemy.body.y - 20, damage.toString(), { font: "10px press_start_2pregular", fill: "#ffffff" });
+                        dmgShow.anchor.x = 0.5;
+                        dmgShow.anchor.y = 0.5;
+                        // Tween the sprite
+                        var tween = this.game.add.tween(dmgShow).to({ alpha: 0, y: dmgShow.y - 20 }, 1000, Phaser.Easing.Linear.None, true, 0);
+                        tween.onComplete.add(function () {
+                            // Destroying the sprite
+                            dmgShow.destroy();
+                        });
+                        if (enemy.health < 1) {
+                            // Kill the enemy
+                            enemy.kill();
+                            this.explode(enemy);
+                            // update combo
+                            this.combo += 1;
+                            // Update score
+                            this.score += (1 * this.level * this.combo);
+                            this.updateUI();
+                            // If No more enemies is alive
+                            if (this.enemies.countLiving() <= 0) {
+                                // Advance to next level.
+                                this.nextLevel();
+                            }
                         }
                     }
                 };
                 Arena.prototype.playerHit = function (player, bullet) {
-                    bullet.kill();
-                    player.health -= 1;
-                    this.updateUI();
-                    if (this.player.health < 1) {
-                        player.kill();
-                        this.endGame();
+                    if (bullet.getOwner() !== player) {
+                        bullet.kill();
+                        // Taking some Damage
+                        player.health -= bullet.getDamage();
+                        // update combo
+                        this.combo = 0;
+                        this.updateUI();
+                        if (this.player.health < 1) {
+                            player.kill();
+                            this.endGame();
+                        }
                     }
                 };
                 // #### AI #### //
@@ -1345,11 +1092,16 @@ var SpaceWars;
                     var playerState = {
                         health: this.player.health
                     };
-                    this.game.state.start('LevelUp', true, false, this.assets, this.level, playerState, this.score);
+                    this.game.state.start('LevelUp', true, false, this.assets, this.level, playerState, this.score, this.combo);
                 };
                 Arena.prototype.endGame = function () {
                     // To Highscores State
                     this.game.state.start('GameOver', true, false, this.assets, this.score);
+                };
+                // #### UTILS #### //
+                Arena.prototype.convertToHex = function (r, g, b) {
+                    var result = "0x" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                    return +result;
                 };
                 return Arena;
             }(Phaser.State));
@@ -1372,7 +1124,7 @@ var SpaceWars;
         var Game = (function (_super) {
             __extends(Game, _super);
             function Game() {
-                _super.call(this, 800, 640, Phaser.CANVAS, 'game_con', null);
+                _super.call(this, 800, 540, Phaser.CANVAS, 'game_con', null);
                 this.state.add('Boot', Core.States.Boot, false);
                 this.state.add('Preloader', Core.States.Preloader, false);
                 this.state.add('MainMenu', Core.States.MainMenu, false);

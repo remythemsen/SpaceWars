@@ -42,7 +42,7 @@ module SpaceWars.Core.States {
 
         loadArenaAssets() {
 
-            this.assets= this.assetRepo.getAll();
+            this.assets = this.assetRepo.getAll();
 
             this.assets.forEach(a => {
                this.load.spritesheet(a.asset_key, a.path, parseInt(a.width), parseInt(a.height));

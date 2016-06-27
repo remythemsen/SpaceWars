@@ -1,4 +1,4 @@
-///<reference path="../vendor/phaser/phaser.d.ts"/>
+///<reference path="../Vendor/phaser/phaser.d.ts"/>
 ///<reference path="../Models/Concrete/Enemy.ts"/>
 module SpaceWars.Collections {
 	export class EnemyGroup extends Phaser.Group {
