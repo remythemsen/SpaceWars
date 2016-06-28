@@ -709,6 +709,10 @@ var SpaceWars;
                 __extends(Arena, _super);
                 function Arena() {
                     _super.apply(this, arguments);
+                    ///////////////////////////////////
+                    /* ##### Performance Enha. ##### */
+                    ///////////////////////////////////
+                    this.slowedLoopNext = 0;
                     // Array with Terrain type Assets
                     this.terrainAssets = [];
                 }
@@ -729,7 +733,7 @@ var SpaceWars;
                     this.playerState = playerState;
                     this.combo = combo;
                     // Settings for the Game should be set here
-                    this.totalEnemies = 20;
+                    this.totalEnemies = 70;
                 };
                 /* After Init has run, create is called
                 *  Here i called all my creation methods
@@ -752,7 +756,8 @@ var SpaceWars;
                     // Spawning Enemies
                     this.generateEnemies();
                     // Spawning Enemies with timed interval
-                    this.nextEnemySpawn = this.game.time.now + 2000;
+                    this.nextEnemySpawn = this.game.time.now + 1000;
+                    this.game.time.events.repeat(Phaser.Timer.SECOND * 1, this.totalEnemies, this.spawnEnemy, this);
                     this.game.time.events.repeat(Phaser.Timer.SECOND * 2, this.totalEnemies, this.spawnEnemy, this);
                     // Loading UI
                     this.loadUI();
@@ -763,6 +768,16 @@ var SpaceWars;
                             classContext.UIControlHelp.visible = false;
                         }
                     };
+                };
+                Arena.prototype.ai = function () {
+                    //#### AI #### //
+                    // try to get player in sight
+                    this.seekPlayerY();
+                    // When player is in sight of enemy
+                    var enemy = this.playerInSight();
+                    if (enemy) {
+                        enemy.shoot();
+                    }
                 };
                 Arena.prototype.update = function () {
                     //  Scroll the background
@@ -778,33 +793,29 @@ var SpaceWars;
                     this.enemies.forEachExists(function (enemy) {
                         this.game.physics.arcade.overlap(this.bullets, this.player, this.playerHit, null, this);
                     }, this);
-                    //#### AI #### //
-                    // try to get player in sight
-                    this.seekPlayerY();
-                    // When player is in sight of enemy
-                    var enemy = this.playerInSight();
-                    if (enemy) {
-                        enemy.shoot();
+                    if (this.slowedLoopNext <= this.game.time.now) {
+                        this.slowedLoopNext = this.game.time.now + 200;
+                        this.ai();
+                        // Killing Props and enemies when they hit left world boundry
+                        this.terrainProps.forEachAlive(function (prop) {
+                            if (prop.body.x + prop.body.width < 0) {
+                                prop.kill();
+                            }
+                        }, this);
+                        //// TODO: Limit foreach to enemies on screen
+                        this.enemies.forEachExists(function (enemy) {
+                            if (enemy.x + enemy.width < 0) {
+                                // Resetting position
+                                enemy.body.x = this.game.world.width + enemy.body.width;
+                                enemy.body.y = this.game.rnd.integerInRange(this.game.world.y, this.game.world.height);
+                                enemy.body.velocity.x = -200;
+                            }
+                        }, this);
                     }
                     // ### SPAWN TERRAIN PROPS ### //
                     if (this.game.time.now > this.nextPropSpawn) {
                         this.spawnProp();
                     }
-                    // Killing Props and enemies when they hit left world boundry
-                    this.terrainProps.forEachAlive(function (prop) {
-                        if (prop.body.x + prop.body.width < 0) {
-                            prop.kill();
-                        }
-                    }, this);
-                    //// TODO: Limit foreach to enemies on screen
-                    this.enemies.forEachExists(function (enemy) {
-                        if (enemy.x + enemy.width < 0) {
-                            // Resetting position
-                            enemy.body.x = this.game.world.width + enemy.body.width;
-                            enemy.body.y = this.game.rnd.integerInRange(this.game.world.y, this.game.world.height);
-                            enemy.body.velocity.x = -200;
-                        }
-                    }, this);
                     // #### CAMERA #### //
                 };
                 Arena.prototype.createMap = function () {
@@ -842,17 +853,21 @@ var SpaceWars;
                         // killing the prop
                         prop.kill();
                     }
-                    this.nextPropSpawn = this.game.time.now + 1000;
+                    this.nextPropSpawn = this.game.time.now + 300;
                 };
                 Arena.prototype.spawnProp = function () {
                     // Grabbing a prop
                     var prop = this.terrainProps.getFirstDead();
+                    prop.anchor.y = 1.0;
+                    prop.anchor.x = 1.0;
+                    var rand = this.game.rnd.realInRange(0, 3);
+                    prop.scale.setTo(rand, rand);
                     // Resetting position
-                    prop.reset(this.game.world.width + prop.body.width, this.game.world.height - prop.body.height);
+                    prop.reset(this.game.world.width + prop.body.width, this.game.world.height);
                     // Setting Movement Speed on prop 
                     prop.body.velocity.x = -200;
                     // When is next spawn
-                    this.nextPropSpawn = this.game.time.now + this.game.rnd.integerInRange(500, 2000);
+                    this.nextPropSpawn = this.game.time.now + this.game.rnd.integerInRange(100, 300);
                 };
                 // #### User Interface ####
                 Arena.prototype.loadUI = function () {
@@ -1000,10 +1015,12 @@ var SpaceWars;
                 Arena.prototype.explode = function (sprite) {
                     // Adding explosion to game
                     var explosion = this.game.add.sprite(sprite.body.x - (sprite.body.width / 2), sprite.body.y, 'explosion_1');
+                    this.game.physics.enable(explosion, Phaser.Physics.ARCADE);
                     explosion.anchor.x = 0.5;
                     explosion.anchor.y = 0.5;
                     explosion.animations.add('explode');
-                    explosion.animations.play('explode', 80, false, true);
+                    explosion.animations.play('explode', 10, false, true);
+                    explosion.body.velocity.x = -255;
                 };
                 // #### Collision Handlers #### //
                 Arena.prototype.enemyHit = function (bullet, enemy) {
